@@ -1,0 +1,38 @@
+categories
+	title
+
+sub_categories
+	category_id
+	title
+
+services
+	id
+	sub_category_id
+	title
+	price
+
+packages
+	id
+	name
+	description
+	price
+
+package_service (Pivot table)
+	id
+	package_id
+	service_id
+
+bookings
+	id
+	user_id
+	date
+	time
+	total_price
+	status
+
+booking_items
+	id
+	booking_id
+	service_id
+	package_id(nullable)
+	price
