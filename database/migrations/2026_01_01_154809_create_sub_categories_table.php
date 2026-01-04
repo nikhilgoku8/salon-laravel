@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->string('title', 100);
+            $table->string('slug', 100);
+            $table->string('thumbnail', 255);
+            $table->string('image', 255);
+            $table->string('pdf', 255);
+            $table->text('description');
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }

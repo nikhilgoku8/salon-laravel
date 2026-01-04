@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('time_slots', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 100);
-            $table->string('slug', 100);
-            $table->integer('sort_order')->default(0);
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('time_slots');
     }
 };

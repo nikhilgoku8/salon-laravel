@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('services', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sub_category_id')->constrained()->onDelete('cascade');
+            $table->string('title', 100);
+            $table->string('slug', 100);
+            $table->integer('price');
+            // $table->text('description');
+            // $table->string('pdf', 255);
+            // $table->text('specifications_table')->nullable();
+            // $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }

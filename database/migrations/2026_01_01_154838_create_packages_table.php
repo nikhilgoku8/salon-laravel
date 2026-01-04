@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
+            $table->string('title', 100);
+            $table->text('description');
+            $table->integer('price');
+            $table->timestamps();
+        });
+
+        Schema::create('package_service', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
+            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -22,6 +32,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('package_service');
         Schema::dropIfExists('packages');
     }
 };
