@@ -14,8 +14,8 @@ class TimeSlot extends Model
         'is_active',
     ];
 
-    // public function appointments()
-    // {
-    //     return $this->hasMany(Appointment::class, 'slot_id');
-    // }
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'slot_id');
+    }
 }

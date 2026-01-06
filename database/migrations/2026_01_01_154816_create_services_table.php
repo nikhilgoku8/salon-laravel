@@ -17,10 +17,7 @@ return new class extends Migration
             $table->string('title', 100);
             $table->string('slug', 100);
             $table->integer('price');
-            // $table->text('description');
-            // $table->string('pdf', 255);
-            // $table->text('specifications_table')->nullable();
-            // $table->integer('sort_order')->default(0);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
     }

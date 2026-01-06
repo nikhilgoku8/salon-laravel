@@ -12,15 +12,22 @@ class Service extends Model
         'sub_category_id',
         'title',
         'slug',
-        'image',
-        'description',
-        'pdf',
-        'specifications_table',
+        'price',
         'sort_order'
     ];
 
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);
+    }
+
+    public function packages()
+    {
+        return $this->belongsToMany(
+            Package::class,
+            'package_service',
+            'service_id',
+            'package_id'
+        )->withTimestamps();
     }
 }

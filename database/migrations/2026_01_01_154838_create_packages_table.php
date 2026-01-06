@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('price');
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
         });
 

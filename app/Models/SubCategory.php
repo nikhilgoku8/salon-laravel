@@ -12,10 +12,6 @@ class SubCategory extends Model
         'category_id',
         'title',
         'slug',
-        'thumbnail',
-        'image',
-        'pdf',
-        'description',
         'sort_order'
     ];
 

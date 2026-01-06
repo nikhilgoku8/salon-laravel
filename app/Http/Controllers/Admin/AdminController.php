@@ -17,6 +17,16 @@ class AdminController extends Controller
         return view('admin/change-password');
     }
 
+    public function register(){
+        $data = array(
+            'fname' => 'Admin',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'superadmin'
+        );
+        Admin::create($data);
+    }
+
     public function changePasswordFunction(Request $request){
 
         $validator = Validator::make($request->all(), [

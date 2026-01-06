@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_items', function (Blueprint $table) {
+        Schema::create('booking_services', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('booking_id')->constrained('bookings')->onDelete('restrict');
+            $table->foreignId('service_id')->constrained('services')->onDelete('restrict');
+            $table->string('service_name', 100);
+            $table->integer('service_price');
             $table->timestamps();
         });
     }
