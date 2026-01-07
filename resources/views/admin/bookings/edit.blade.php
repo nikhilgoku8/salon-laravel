@@ -6,10 +6,10 @@
         <div class="col-lg-12">
             <div class="page-header my_style">
                 <div class="left_section">
-                    <h1 class="">Edit Appointment</h1>
+                    <h1 class="">Edit Booking</h1>
                     <ul class="breadcrumb">
                         <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                        <li><a href="{{ route('admin.appointments.index') }}">Appointments</a></li>
+                        <li><a href="{{ route('admin.bookings.index') }}">Bookings</a></li>
                     </ul>    
                 </div>
                 
@@ -42,26 +42,26 @@
                         <div class="input_boxes">
                             <div class="col-sm-4">
                                 <div class="input_box">
-                                    <label>Patient Name</label>
-                                    <input type="text" name="" value="{{ $result->patient_name }}" readonly disabled>
+                                    <label>Name</label>
+                                    <input type="text" name="" value="{{ $result->name }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input_box">
-                                    <label>Patient Email</label>
-                                    <input type="text" name="" value="{{ $result->patient_email }}" readonly disabled>
+                                    <label>Email</label>
+                                    <input type="text" name="" value="{{ $result->email }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input_box">
-                                    <label>Patient Phone</label>
-                                    <input type="text" name="" value="{{ $result->patient_phone }}" readonly disabled>
+                                    <label>Phone</label>
+                                    <input type="text" name="" value="{{ $result->phone }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input_box">
-                                    <label>Appointment Date</label>
-                                    <input type="text" name="" value="{{ $result->appointment_date }}" readonly disabled>
+                                    <label>Booking Date</label>
+                                    <input type="text" name="" value="{{ $result->booking_date }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -84,8 +84,8 @@
                             </div>
                             <div class="col-sm-12">
                                 <div class="input_box">
-                                    <label>Patient Message</label>
-                                    <textarea readonly disabled>{{ $result->patient_message }}</textarea>
+                                    <label>Message</label>
+                                    <textarea readonly disabled>{{ $result->message }}</textarea>
                                 </div>
                             </div>
                             <div class="col-sm-12">
@@ -136,14 +136,14 @@ $(document).ready(function() {
 
         $.ajax({
             type: "POST",
-            url: "{{ route('admin.appointments.update', $result->id) }}",
+            url: "{{ route('admin.bookings.update', $result->id) }}",
             data:  new FormData(this),
             dataType: 'json',
             cache: false,
             contentType: false,
             processData: false,
             success: function(result) {
-                // location.href="{{ route('admin.appointments.index') }}";
+                // location.href="{{ route('admin.bookings.index') }}";
                 window.location.reload(true);
             },
             error: function(data){

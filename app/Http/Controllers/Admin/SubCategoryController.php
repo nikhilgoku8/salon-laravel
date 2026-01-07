@@ -66,11 +66,6 @@ class SubCategoryController extends Controller
             $rules = [
                 'category_id' => 'required|exists:categories,id',
                 'title' => 'required|string|max:255|unique:sub_categories,title,'.$dataID,
-                'thumbnail' => 'nullable|bail|required_without:existing_thumbnail|file|mimes:jpeg,png,jpg,webp|max:2048',
-                'image' => 'nullable|bail|required_without:existing_image|file|mimes:jpeg,png,jpg,webp|max:2048',
-                'pdf' => 'nullable|bail|required_without:existing_pdf|file|mimes:pdf',
-                'description' => 'required|string',
-                // 'sort_order' => $isNew ? 'nullable|numeric' : 'required|numeric',
                 'sort_order' => 'required|numeric|min:0',
             ];
 
@@ -84,75 +79,7 @@ class SubCategoryController extends Controller
             $validated = $validator->validated();
 
             $validated['slug'] = $this->string_filter($validated['title']);
-
-            // Need to set folder path for file manipulation
-            $uploadRoot = base_path(env('UPLOAD_ROOT'));
-            $subCategoriesFolder = $uploadRoot . '/sub-categories';
-
-            if($request->hasFile('thumbnail')){
-                $file = $validated['thumbnail'];
-                $fileName = $validated['slug'] . '_' . date('Ymdhis') . '.' . $file->getClientOriginalExtension();
-                $file->move($subCategoriesFolder, $fileName);
-                $validated['thumbnail'] = $fileName;
-
-                if(!empty($dataID)){
-                    // Get existing thumbnail name from database for current id
-                    $existing_thumbnail = SubCategory::find($dataID)->thumbnail;
-
-                    // Delete existing thumbnail if exists
-                    if($existing_thumbnail && file_exists($subCategoriesFolder.'/'.$existing_thumbnail)){
-                        @unlink($subCategoriesFolder.'/'.$existing_thumbnail);
-                    }
-                }
-            }else{
-                $validated['thumbnail'] = $request->input('existing_thumbnail');
-            }
-
-            if($request->hasFile('image')){
-                $file = $validated['image'];
-                $fileName = $validated['slug'] . '_' . date('Ymdhis') . '.' . $file->getClientOriginalExtension();
-                $file->move($subCategoriesFolder, $fileName);
-                $validated['image'] = $fileName;
-
-                if(!empty($dataID)){
-                    // Get existing image name from database for current id
-                    $existing_image = SubCategory::find($dataID)->image;
-
-                    // Delete existing image if exists
-                    if($existing_image && file_exists($subCategoriesFolder.'/'.$existing_image)){
-                        @unlink($subCategoriesFolder.'/'.$existing_image);
-                    }
-                }
-            }else{
-                $validated['image'] = $request->input('existing_image');
-            }
-
-            $subCategoriesPdfFolder = $uploadRoot . '/sub-categories/pdf';
-
-            if($request->hasFile('pdf')){
-                $file = $validated['pdf'];
-                $fileName = $validated['slug'] . '_' . uniqid() . '_' . date('Ymdhis') . '.' . $file->getClientOriginalExtension();
-                $file->move($subCategoriesPdfFolder, $fileName);
-                $validated['pdf'] = $fileName;
-
-                if(!empty($dataID)){
-                    // Get existing pdf name from database for current id
-                    $existing_pdf = SubCategory::find($dataID)->pdf;
-
-                    // Delete existing pdf if exists
-                    if($existing_pdf && file_exists($subCategoriesPdfFolder.'/'.$existing_pdf)){
-                        @unlink($subCategoriesPdfFolder.'/'.$existing_pdf);
-                    }
-                }
-            }else{
-                $validated['pdf'] = $request->input('existing_pdf');
-            }
-
-            if ($isNew) {
-                $validated['created_by'] = session('username');
-            }
-            $validated['updated_by'] = session('username');
-
+            
             // Directly handle the save/update logic here
             if ($isNew) {
                 $subCategory = SubCategory::create($validated);

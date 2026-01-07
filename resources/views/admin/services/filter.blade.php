@@ -11,13 +11,13 @@
                         </div>
                     </div>
                     <div class="filter_form">
-                        <form id="filter_form" action="{{ route('products.index') }}" method="GET">
+                        <form id="filter_form" action="{{ route('admin.services.index') }}" method="GET">
                         <!-- @@csrf -->
                         <div class="col-sm-4">
                             <div class="input_box">
-                                <label>Product Name</label>
+                                <label>Service Name</label>
                                 <div class="error form_error" id="form-error-q"></div>
-                                <input type="text" name="q" placeholder="Product Name" value="{{ request('q') ?? '' }}">
+                                <input type="text" name="q" placeholder="Service Name" value="{{ request('q') ?? '' }}">
                             </div>
                         </div>
                         <div class="col-sm-4">
@@ -52,16 +52,17 @@
                             <span class="input_box purple_filled_btn">
                                 <button type="submit">Search</button>
                             </span>
-                            <span class="input_box orange_hollow_btn">
-                                <button type="submit" formaction="{{ route('products.export') }}">Export</button>
-                            </span>
+                            <!-- <span class="input_box orange_hollow_btn">
+                                <button type="submit" formaction="@{{ route('admin.services.export') }}">Export</button>
+                            </span> -->
                             <span class="input_box blue_filled_btn">
-                                <a href="{{ route('products.index').'?q=' }}" class="">Clear Filters</a>
+                                <!-- <a href="{{ route('admin.services.index').'?q=' }}" class="">Clear Filters</a> -->
+                                <a href="{{ route('admin.services.index') }}" class="">Clear Filters</a>
                             </span>
                         </div>
                         <!-- <div class="col-sm-4">
                             <div class="input_box blue_filled_btn">
-                                <a href="{{ route('products.index').'?q=' }}" class="">Clear Filters</a>
+                                <a href="{{ route('admin.services.index').'?q=' }}" class="">Clear Filters</a>
                             </div>
                         </div> -->
                         <!-- <div class="col-sm-2">

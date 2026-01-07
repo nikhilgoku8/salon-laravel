@@ -6,30 +6,34 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Package;
+use App\Models\SubCategory;
 
 class PackageController extends Controller
 {
     public function index()
     {
-        $data['result'] = Category::orderBy('sort_order')->paginate(100);
-        return view('admin.categories.index', $data);
+        $data['result'] = Package::orderBy('sort_order')->paginate(100);
+        return view('admin.packages.index', $data);
     }
 
     public function create()
     {
-        return view('admin.categories.create');
+        $data['subCategories'] = SubCategory::with('services')->orderBy('sort_order')->get();
+        return view('admin.packages.create', $data);
     }
 
-    public function show(Category $category)
+    public function show(Package $package)
     {
-        $data['result'] = $category;
-        return view('admin.categories.show', $data);
+        $data['result'] = $package;
+        $data['subCategories'] = SubCategory::with('services')->orderBy('sort_order')->get();
+        return view('admin.packages.show', $data);
     }
 
-    public function edit(Category $category)
+    public function edit(Package $package)
     {
-        $data['result'] = $category;
-        return view('admin.categories.edit', $data);
+        $data['result'] = $package;
+        $data['subCategories'] = SubCategory::with('services')->orderBy('sort_order')->get();
+        return view('admin.packages.edit', $data);
     }
 
     public function string_filter($string){
@@ -39,25 +43,29 @@ class PackageController extends Controller
 
     public function store(Request $request)
     {
-        return $this->handleCategoryRequest($request, new Category(), true);
+        return $this->handlePackageRequest($request, new Package(), true);
     }
 
-    public function update(Request $request, Category $category)
+    public function update(Request $request, Package $package)
     {
 
-        return $this->handleCategoryRequest($request, $category, false);
+        return $this->handlePackageRequest($request, $package, false);
 
     }
 
-    private function handleCategoryRequest(Request $request, Category $category, bool $isNew)
+    private function handlePackageRequest(Request $request, Package $package, bool $isNew)
     {
 
         $dataID = $request->input('dataID');
 
         try {
             $validated = $request->validate([
-                'title' => 'required|string|max:255|unique:categories,title,'. $dataID,
+                'title' => 'required|string|max:255|unique:packages,title,'. $dataID,
+                'description' => 'required|string',
+                'price' => 'required|numeric|min:1',
                 'sort_order' => 'required|numeric|min:0',
+                'services' => 'required|array|min:2',
+                'services.*' => 'required|exists:services,id',
             ]);
 
             if ($isNew) {
@@ -69,14 +77,16 @@ class PackageController extends Controller
 
             // Directly handle the save/update logic here
             if ($isNew) {
-                $category = Category::create($validated);
+                $package = Package::create($validated);
             } else {
-                $category->update($validated);
+                $package->update($validated);
             }
+
+            $package->services()->sync($validated['services']);
 
             return response()->json([
                 'status' => 'success',
-                'message' => $isNew ? 'Category created successfully!' : 'Category updated successfully!',
+                'message' => $isNew ? 'Package created successfully!' : 'Package updated successfully!',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -95,17 +105,17 @@ class PackageController extends Controller
         }
     }
 
-    public function destroy(Category $category)
+    public function destroy(Package $package)
     {
-        $category->delete();
-        return redirect()->route('admin.categories.index')->with('success', 'Category deleted!');
+        $package->delete();
+        return redirect()->route('admin.packages.index')->with('success', 'Package deleted!');
     }
 
     public function bulkDelete(Request $request)
     {
         // $dataIDs = $request->input('dataID');
 
-        Category::destroy($request->dataID);
+        Package::destroy($request->dataID);
 
         return response()->json(['success' => true, 'message' => 'Record Deleted']);
     }

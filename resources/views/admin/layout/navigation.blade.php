@@ -68,36 +68,36 @@
                         </li>
                         <li><a href="{{ route('admin.dashboard') }}" class="active"><i class="fa fa-line-chart" aria-hidden="true"></i> Dashboard</a></li>
 
-                        <li>
+                        <!-- <li>
                             <a><i class="fa fa-list-ul" aria-hidden="true"></i> Blogs Categories<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="{{ route('admin.blogs-categories.index') }}">All Categories</a></li>
-                                <li><a href="{{ route('admin.blogs-categories.create') }}">Add New</a></li>
+                                <li><a href="@{{ route('admin.blogs-categories.index') }}">All Categories</a></li>
+                                <li><a href="@{{ route('admin.blogs-categories.create') }}">Add New</a></li>
                             </ul>
-                            <!-- /.nav-second-level -->
                         </li>
 
                         <li>
                             <a><i class="fa fa-medkit" aria-hidden="true"></i> Blog Posts<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="{{ route('admin.blog-posts.index') }}">All Posts</a></li>
-                                <li><a href="{{ route('admin.blog-posts.create') }}">Add New</a></li>
+                                <li><a href="@{{ route('admin.blog-posts.index') }}">All Posts</a></li>
+                                <li><a href="@{{ route('admin.blog-posts.create') }}">Add New</a></li>
                             </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                        </li> -->
 
                         <li>
-                            <a href="{{ route('admin.specializations.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Specialization</a>
-                            <a href="{{ route('admin.doctors.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Doctors</a>
+                            <a href="{{ route('admin.categories.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Categories</a>
+                            <a href="{{ route('admin.sub-categories.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Sub Categories</a>
+                            <a href="{{ route('admin.services.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Services</a>
+                            <a href="{{ route('admin.packages.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Packages</a>
                             <a href="{{ route('admin.time-slots.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Time Slots</a>
                         </li>
 
                         <li>
-                            <a><i class="fa fa-medkit" aria-hidden="true"></i> Appointments<span class="fa arrow"></span></a>
+                            <a><i class="fa fa-medkit" aria-hidden="true"></i> Bookings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a href="{{ route('admin.appointments.index') }}">All</a></li>
-                                <li><a href="{{ route('admin.appointments.upcoming') }}">Upcoming</a></li>
-                                <li><a href="{{ route('admin.appointments.past') }}">Past</a></li>
+                                <li><a href="{{ route('admin.bookings.index') }}">All</a></li>
+                                <li><a href="{{ route('admin.bookings.upcoming') }}">Upcoming</a></li>
+                                <li><a href="{{ route('admin.bookings.past') }}">Past</a></li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

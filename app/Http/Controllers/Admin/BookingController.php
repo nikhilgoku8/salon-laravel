@@ -4,32 +4,32 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Appointment;
+use App\Models\Booking;
 
 class BookingController extends Controller
 {
     public function index()
     {
-        $data['result'] = Appointment::orderBy('appointment_date')->paginate(100);
-        return view('admin.appointments.index', $data);
+        $data['result'] = Booking::orderBy('booking_date')->paginate(100);
+        return view('admin.bookings.index', $data);
     }
 
     public function upcoming()
     {
-        $data['result'] = Appointment::orderBy('appointment_date')->where('appointment_date', '>=', date('Y-m-d'))->paginate(100);
-        return view('admin.appointments.index', $data);
+        $data['result'] = Booking::orderBy('booking_date')->where('booking_date', '>=', date('Y-m-d'))->paginate(100);
+        return view('admin.bookings.index', $data);
     }
 
     public function past()
     {
-        $data['result'] = Appointment::orderBy('appointment_date')->where('appointment_date', '<', date('Y-m-d'))->paginate(100);
-        return view('admin.appointments.index', $data);
+        $data['result'] = Booking::orderBy('booking_date')->where('booking_date', '<', date('Y-m-d'))->paginate(100);
+        return view('admin.bookings.index', $data);
     }
 
     public function edit($id)
     {
-        $data['result'] = Appointment::findOrFail($id);
-        return view('admin.appointments.edit', $data);
+        $data['result'] = Booking::findOrFail($id);
+        return view('admin.bookings.edit', $data);
     }
 
     public function update(Request $request)
@@ -42,14 +42,14 @@ class BookingController extends Controller
                 'status' => 'required',
             ]);
 
-            $appointment = Appointment::findOrFail($dataID);
-            $appointment->update($validated);
+            $booking = Booking::findOrFail($dataID);
+            $booking->update($validated);
 
-            session()->flash('success', 'Appointment updated successfully!');
+            session()->flash('success', 'Booking updated successfully!');
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Appointment updated successfully!',
+                'message' => 'Booking updated successfully!',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
