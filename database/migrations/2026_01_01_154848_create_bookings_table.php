@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phone', 10);
             $table->text('address');
             $table->foreignId('package_id')->nullable()->constrained('packages');
+            $table->string('package_title', 100)->nullable();
             $table->integer('total_price');
 
             $table->foreignId('slot_id')->constrained('time_slots')->onDelete('restrict');

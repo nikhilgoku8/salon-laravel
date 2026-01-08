@@ -75,6 +75,25 @@
                                 <input type="number" min="0" name="sort_order" placeholder="Sort Order" value="{{ $result->sort_order }}">
                             </div>
                         </div>
+                        <div class="col-sm-12">
+                            <div class="input_box">
+                                <label>Services</label>
+                                <div class="error form_error" id="form-error-services"></div>
+                                @if(!empty($subCategories) && count($subCategories) > 0)
+                                <select name="services[]" multiple>
+                                    @foreach($subCategories as $subCategory)
+                                        @if(!empty($subCategory->services) && count($subCategory->services) > 0)
+                                            <optgroup label="{{$subCategory->title}}">
+                                                @foreach($subCategory->services as $service)
+                                                    <option value="{{$service->id}}" @selected(in_array($service->id, $result->services->pluck('id')->toArray() ))>{{$service->title}}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                @endif
+                            </div>
+                        </div>
                         <div class="clr"></div>
                     </div>
 

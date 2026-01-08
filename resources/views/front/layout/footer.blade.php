@@ -85,6 +85,90 @@
   
 
 
+<script>
+$(document).ready(function () {    
+
+    $(".booking_form").on('submit',(function(e){
+        $this = $(this);
+        e.preventDefault();
+        $(".form_error").html("");
+        $(".form_error").removeClass("alert alert-danger");
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('booking.store') }}",
+            data:  new FormData(this),
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(result) {
+                location.href="{{ route('booking.thank-you') }}";
+            },
+            error: function(data){
+                if (data.status === 422) {
+                    let errors = data.responseJSON.errors;
+                    $.each(errors, function (key, message) {
+                        var fieldName = key.replace(/\./g, '-');
+                        $this.find(".form-error-"+fieldName).html(message);
+                        $this.find(".form-error-"+fieldName).addClass('alert alert-danger');
+                        // $('#form-error-' + key).html(message).addClass('alert alert-danger');
+                    });
+                } else if (data.status === 401) {
+                    alert("Please log in.");
+                    // window.location.href = "/login";
+                } else if (data.status === 403) {
+                    alert("You don’t have permission.");
+                } else if (data.status === 404) {
+                    alert("The resource was not found.");
+                } else if (data.status === 500) {
+                    alert("Something went wrong on the server.");
+                    console.log(data.console_message);
+                } else {
+                    alert("Unexpected error: " + data.status);
+                    console.log(data);
+                }
+            }
+        });
+
+    }));
+
+    // Event listener for changes in both start and end input fields
+    $('[name=doctor_id], [name=booking_date]').on('change', function() {
+        updateTimeSlots();
+    });
+
+    function updateTimeSlots() {
+
+        const booking_date = $('[name=booking_date]').val();
+        const doctor_id = $('[name=doctor_id]').val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('get-time-slots') }}",
+            data: {"_token":"{{ csrf_token() }}", "doctor_id":doctor_id, "booking_date":booking_date},
+            dataType: 'json',
+            success: function(result) {
+                console.log(result.slots);
+                $timeSlot = $("[name=slot_id]");
+                $timeSlot.find("option").remove();
+                $timeSlot.append('<option value="">Select Time Slot</option>');
+                if (result.slots.length === 0) {
+                    $timeSlot.append('<option value="">No slots available select another date/doctor</option>');
+                    return; // Stop here, do NOT run the loop
+                }else{
+                    jQuery.each( result.slots, function( i, val ) {
+                        $timeSlot.append('<option value="'+val['id']+'" ' + (val['is_booked'] ? 'disabled' : '') + '>'+val['start_time']+' - '+val['end_time'] + (val['is_booked'] ? ' - Booked' : '') +'</option>');
+                    });
+                }
+            },
+            error: function(data){
+            }
+        });
+
+    }
+});
+</script>
 
 
 <!--sticky header-->

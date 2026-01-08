@@ -15,6 +15,7 @@ class Booking extends Model
         'phone',
         'address',
         'package_id',
+        'package_title',
         'total_price',
         'slot_id',
         'booking_date',

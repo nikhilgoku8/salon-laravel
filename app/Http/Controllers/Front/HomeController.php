@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TimeSlot;
-use App\Models\Appointment;
+use App\Models\Package;
+use App\Models\Booking;
 
 use Mail;
 use Illuminate\Support\Facades\Validator;
@@ -62,23 +63,23 @@ class HomeController extends Controller
         return view('front.the-right-way-to-prep-for-a-facial');
     }
 
-    public function appointment_store(Request $request)
+    public function booking_store(Request $request)
     {
         $dataID = $request->input('dataID');
         try {
 
             $rules = [
-                'patient_name' => 'required|string|max:150',
-                'patient_email' => 'required|email|max:150',
-                'patient_phone' => 'required|numeric|digits:10',
-                'specialization_id' => 'required|exists:specializations,id',
-                'doctor_id' => 'required|exists:doctors,id',
+                'fname' => 'required|string|max:150',
+                'lname' => 'required|string|max:150',
+                'email' => 'required|email|max:150',
+                'phone' => 'required|numeric|digits:10',
+                'address' => 'required|string',
+                'package_id' => 'nullable|exists:packages,id',
+                // 'package_title' => 'nullable|string',
+                'total_price' => 'required|numeric|min:1',
                 'slot_id' => 'required|exists:time_slots,id',
-                'appointment_date' => 'required|date',
-                'patient_message' => 'nullable|string',
-                'otp'=>'required|numeric|digits:6',
-                // 'doctor_remarks' => 'required|string',
-                // 'status' => 'required|string|max:20',
+                'doctor_id' => 'required|exists:doctors,id',
+                'booking_date' => 'required|date',
             ];
 
             $messages = [];
@@ -93,22 +94,25 @@ class HomeController extends Controller
             if(session('otp') != $request->otp){
                 $validator->getMessageBag()->add('otp', 'OTP does not match');
                 throw new \Illuminate\Validation\ValidationException($validator);
-            }elseif (session('otp_email') !== $request->patient_email) {
-                $validator->getMessageBag()->add('patient_email', 'Email must match OTP sent email');
+            }elseif (session('otp_email') !== $request->email) {
+                $validator->getMessageBag()->add('email', 'Email must match OTP sent email');
                 throw new \Illuminate\Validation\ValidationException($validator);
             }elseif (session('otp_expires_at') < now()) {
                 $validator->getMessageBag()->add('otp', 'OTP Expired');
                 throw new \Illuminate\Validation\ValidationException($validator);
             }
 
+            if(!empty($validated['package_id'])){
+                $validated['package_title'] = Package::where('id', $validated['package_id'])->value('title');
+            }
             $validated['start_time'] = TimeSlot::where('id', $validated['slot_id'])->value('start_time');
             $validated['end_time'] = TimeSlot::where('id', $validated['slot_id'])->value('end_time');
 
-            Appointment::create($validated);
+            Booking::create($validated);
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Appointment created successfully!',
+                'message' => 'Booking created successfully!',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -130,18 +134,17 @@ class HomeController extends Controller
     public function getTimeSlots(Request $request)
     {
         $request->validate([
-            'doctor_id' => 'required|exists:doctors,id',
-            'appointment_date' => 'required|date|after_or_equal:today'
+            'booking_date' => 'required|date|after_or_equal:today'
         ]);
 
-        $appointmentDate = $request->appointment_date;
+        $bookingDate = $request->booking_date;
         $today = now()->toDateString();
 
         // Base query for active slots
         $timeSlotsQuery = TimeSlot::where('is_active', 1);
 
         // If date is today, filter slots greater than current time
-        if ($appointmentDate === $today) {
+        if ($bookingDate === $today) {
             $currentTime = now()->format('H:i:s');
             $timeSlotsQuery->where('start_time', '>', $currentTime);
         }
@@ -150,8 +153,7 @@ class HomeController extends Controller
         $timeSlots = $timeSlotsQuery->orderBy('start_time')->get();
 
         // Booked slots for this doctor on that date
-        $booked = Appointment::where('doctor_id', $request->doctor_id)
-            ->where('appointment_date', $appointmentDate)
+        $booked = Booking::where('booking_date', $bookingDate)
             ->where('status', '!=', 'cancelled')
             ->pluck('slot_id')
             ->toArray();
