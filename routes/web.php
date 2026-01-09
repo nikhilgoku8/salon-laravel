@@ -26,6 +26,10 @@ Route::get('/contact-us', [HomeController::class, 'contact_us'])->name('contact_
 Route::get('/service', [HomeController::class, 'service'])->name('service');
 Route::get('/the-right-way-to-prep-for-a-facial', [HomeController::class, 'single_blog'])->name('single_blog');
 
+Route::post('/book', [HomeController::class, 'booking_store'])->name('booking.store');
+Route::get('/thank-you', [HomeController::class, 'thank_you'])->name('booking.thank-you');
+Route::post('/get-time-slots', [HomeController::class, 'getTimeSlots'])->name('get-time-slots');
+
 Route::get('test-mail', [HomeController::class, 'test_mail']);
 
 

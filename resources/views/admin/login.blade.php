@@ -11,8 +11,9 @@ BaseUrl.siteRoot = "{{ URL::to('/') }}/";
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<link rel="icon" type="icon/png" href="{{ asset('front/images/favicon.png') }}">
 
-<title>Admin Login</title>
+<title>{{ config('app.name') }} Admin Login</title>
 
 <!-- Bootstrap Core CSS -->
 <link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet">

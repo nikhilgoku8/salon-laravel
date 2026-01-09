@@ -1398,6 +1398,9 @@ div[class*="col-sm"] .my_panel{
 
 }
 
+.details_table table tr{
+	background: #ffffff;
+}
 .details_table table tr:nth-child(2n+3) {
 
   background: #f4f6fd;
@@ -1432,6 +1435,17 @@ div[class*="col-sm"] .my_panel{
 
 	word-break: break-word;
 
+}
+
+.details_table table tr td tr td{
+	border: 1px solid #dee1ed;
+}
+
+.details_table table tr td tr:nth-child(2n+1){
+	background: #f4f6fd;
+}
+.details_table table tr td tr:nth-child(1) td{
+	font-weight: 700;
 }
 
 .details_table table tr td.action{

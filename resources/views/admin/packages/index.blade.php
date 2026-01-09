@@ -86,9 +86,9 @@
                                                             <td>{{ $service->price }}</td>
                                                         </tr>
                                                     @endforeach
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
+                                                    <tr class="last_table_row">
+                                                        <td colspan="2">Total</td>
+                                                        <!-- <td></td> -->
                                                         <td>{{ $row->services->sum('price') }}</td>
                                                     </tr>
                                                 </table>

@@ -4,6 +4,8 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
+<link rel="icon" type="icon/png" href="{{ asset('front/images/favicon.png') }}">
+
 <title>{{ config('app.name') }} Admin</title>
 
 <!-- Bootstrap Core CSS -->

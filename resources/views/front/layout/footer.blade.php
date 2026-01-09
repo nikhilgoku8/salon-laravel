@@ -82,11 +82,132 @@
     </div>
     
 </footer>
-  
 
+
+<div class="body_overlay">
+    <div class="inner_box">
+        <div class="request_overlay_box">
+            <div class="form_wrapper">
+                <div class="heading">Book</div>
+                <form class="booking_form" action="" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class="error form_error form-error-fname"></div>
+                            <input type="text" name="fname" placeholder="First Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class="error form_error form-error-lname"></div>
+                            <input type="text" name="lname" placeholder="Last Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class="error form_error form-error-phone"></div>
+                            <input type="text" name="phone" placeholder="Phone">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class="error form_error form-error-email"></div>
+                            <input type="text" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 textarea_box">
+                        <div class="input_box">
+                            <div class="error form_error form-error-address"></div>
+                            <textarea name="address" placeholder="Address"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="input_box">
+                            <label><b>Services</b> (Multiple selection allowed)</label>
+                            <div class="error form_error form-error-services"></div>
+                            <!-- <select name="services[]" class="services">
+                                <option value="">Select Service</option> -->
+                                @if(!empty($subCategories) && count($subCategories) > 0)
+                                    <select name="services[]" multiple>
+                                        @foreach($subCategories as $subCategory)
+                                            @if(!empty($subCategory->services) && count($subCategory->services) > 0)
+                                                <optgroup label="{{$subCategory->title}}">
+                                                    @foreach($subCategory->services as $service)
+                                                        <option value="{{$service->id}}">{{$service->title}}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                @endif
+                            <!-- </select> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="input_box">
+                            <label><b>Package</b></label>
+                            <div class="error form_error form-error-package_id"></div>
+                                @if(!empty($packages) && count($packages) > 0)
+                                    <select name="package_id">
+                                        <option value="">Select Package</option>
+                                        @foreach($packages as $package)
+                                            <option value="{{$package->id}}">{{$package->title}}</option>
+                                        @endforeach
+                                    </select>
+                                @endif
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class="error form_error form-error-booking_date"></div>
+                            <input type="text" name="booking_date" placeholder="Booking Date" class="future_datepicker">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 slot_box">
+                        <div class="input_box">
+                            <div class="error form_error form-error-slot_id"></div>
+                            <select name="slot_id">
+                                <option value="">Select Time Slot</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 submit_box">
+                        <div class="input_box center">
+                            <div class="error form_error form-error-all_errors all_errors"></div>
+                            <button type="submit" class="pink_btn">submit</button>
+                        </div>
+                    </div>
+                    <div class="clr"></div>
+                </form>
+            </div>
+             <a class="close_overlay"></a>
+        </div>
+    </div>
+</div>
+<!-- body_overlay -->
+
+<!-- Select Search JavaScript -->
+<script src="{{ asset('admin/assets/plugins/selects_search/select2.min.js') }}"></script>
+<script>
+$(document).ready(function(){
+    $("select").select2();
+});
+</script>
 
 <script>
 $(document).ready(function () {    
+
+    $(".request_callback").on('click', function(){
+        $(".body_overlay").fadeIn();
+    });
+    $(".close_overlay").on('click', function(){
+        $(".body_overlay").fadeOut();
+    });
+    $(".body_overlay").on('click', function(event){
+        if (!$(event.target).closest('.request_overlay_box').length) {
+            $(".body_overlay").fadeOut();
+        }
+    });
 
     $(".booking_form").on('submit',(function(e){
         $this = $(this);
@@ -134,19 +255,18 @@ $(document).ready(function () {
     }));
 
     // Event listener for changes in both start and end input fields
-    $('[name=doctor_id], [name=booking_date]').on('change', function() {
+    $('[name=booking_date]').on('change', function() {
         updateTimeSlots();
     });
 
     function updateTimeSlots() {
 
         const booking_date = $('[name=booking_date]').val();
-        const doctor_id = $('[name=doctor_id]').val();
 
         $.ajax({
             type: "POST",
             url: "{{ route('get-time-slots') }}",
-            data: {"_token":"{{ csrf_token() }}", "doctor_id":doctor_id, "booking_date":booking_date},
+            data: {"_token":"{{ csrf_token() }}", "booking_date":booking_date},
             dataType: 'json',
             success: function(result) {
                 console.log(result.slots);
@@ -154,7 +274,7 @@ $(document).ready(function () {
                 $timeSlot.find("option").remove();
                 $timeSlot.append('<option value="">Select Time Slot</option>');
                 if (result.slots.length === 0) {
-                    $timeSlot.append('<option value="">No slots available select another date/doctor</option>');
+                    $timeSlot.append('<option value="">No slots available select another date</option>');
                     return; // Stop here, do NOT run the loop
                 }else{
                     jQuery.each( result.slots, function( i, val ) {
@@ -242,6 +362,28 @@ $(document).ready(function() {
 <!--slider-->
 <script src="{{ asset('front/plugins/owl-carousel/owl.carousel.js') }}"></script>
 <script src="{{ asset('front/plugins/owl-carousel/owl-content-animation.js') }}"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+<script src="{{ asset('admin/assets/js/bootstrap.min.js') }}"></script>
+<!--Start calender -->
+<script src="{{ asset('admin/assets/js/bootstrap-datetimepicker.js') }}"></script>
+<script type="text/javascript">
+
+    $('.future_datepicker').datetimepicker({
+        startDate: new Date(),
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        format: 'yyyy-mm-dd'
+    });
+  
+</script>
+<!-- End calender -->
 
 </body>
 </html>

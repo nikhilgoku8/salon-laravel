@@ -79,17 +79,17 @@
                                 <label>Services</label>
                                 <div class="error form_error" id="form-error-services"></div>
                                 @if(!empty($subCategories) && count($subCategories) > 0)
-                                <select name="services[]" multiple>
-                                    @foreach($subCategories as $subCategory)
-                                        @if(!empty($subCategory->services) && count($subCategory->services) > 0)
-                                            <optgroup label="{{$subCategory->title}}">
-                                                @foreach($subCategory->services as $service)
-                                                    <option value="{{$service->id}}">{{$service->title}}</option>
-                                                @endforeach
-                                            </optgroup>
-                                        @endif
-                                    @endforeach
-                                </select>
+                                    <select name="services[]" multiple>
+                                        @foreach($subCategories as $subCategory)
+                                            @if(!empty($subCategory->services) && count($subCategory->services) > 0)
+                                                <optgroup label="{{$subCategory->title}}">
+                                                    @foreach($subCategory->services as $service)
+                                                        <option value="{{$service->id}}">{{$service->title}}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
+                                        @endforeach
+                                    </select>
                                 @endif
                             </div>
                         </div>

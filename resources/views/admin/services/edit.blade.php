@@ -183,7 +183,7 @@ $(document).ready(function() {
                 url: "{{ route('admin.get_sub_categories_by_category', ':id') }}".replace(':id', categoryId),
                 type: 'POST',
                 data: {
-                    _token: token
+                    _token: "{{csrf_token()}}"
                 },
                 success: function (data) {
                     let $subCategoriesSelect = $('select[name="sub_category_id"]');

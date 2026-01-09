@@ -67,7 +67,7 @@ class ServiceController extends Controller
     {
         $data['result'] = $service;
         $data['categories'] = Category::all();
-        $data['subCategories'] = SubCategory::all();
+        $data['subCategories'] = SubCategory::where('category_id', $service->subCategory->category_id)->get();
         return view('admin.services.edit', $data);
     }
 

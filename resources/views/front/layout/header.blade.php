@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Html Framework</title>
 <meta name="description" content="," />
-<meta name="keywords" content="" />
+
+<link rel="icon" type="icon/png" href="{{ asset('front/images/favicon.png') }}">
 
 <link href="{{ asset('front/css/reset.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('front/css/ace-responsive-menu.css') }}" rel="stylesheet" type="text/css" />
@@ -24,6 +25,14 @@
 <link href="{{ asset('front/plugins/owl-carousel/owl.theme.default.min.css') }}" rel="stylesheet">
 
 <link href="{{ asset('front/plugins/venobox/venobox.min.css') }}" rel="stylesheet" type="text/css" media="screen" />
+
+<!-- Bootstrap Core CSS -->
+<link href="{{ asset('admin/assets/css/bootstrap.min.css') }}" rel="stylesheet">
+<!--Datepicker-->
+<link href="{{ asset('admin/assets/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+
+<!-- Select Search -->
+<link rel="stylesheet" href="{{ asset('admin/assets/plugins/selects_search/select2.min.css') }}">
 
 <link href="{{ asset('front/css/style.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('front/css/responsive.css') }}" rel="stylesheet" type="text/css" />
@@ -97,7 +106,7 @@
                     </a>
                 </div>
                 <div class="get_appointment">
-                    <a href="#">GET APPOINTMENT</a>
+                    <a href="#" class="request_callback">GET APPOINTMENT</a>
                 </div>
             </div>
         </div>
