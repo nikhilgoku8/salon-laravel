@@ -88,7 +88,7 @@
     <div class="inner_box">
         <div class="request_overlay_box">
             <div class="form_wrapper">
-                <div class="heading">Book</div>
+                <div class="heading">Book Package / Service</div>
                 <form class="booking_form" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="col-sm-6">
@@ -121,6 +121,26 @@
                             <textarea name="address" placeholder="Address"></textarea>
                         </div>
                     </div>
+                    <div class="col-sm-12 package_input_wrapper">
+                        <div class="input_box">
+                            <label><b>Selected Package</b></label>
+                            <div class="error form_error form-error-package_id"></div>
+                            <input type="hidden" name="package_id">
+                            <input type="hidden" name="package_price">
+                            <div class="package_info">
+                                <div class="package_title">Package Name</div>
+                                <div class="package_services"></div>
+                            </div>
+                            <!-- @if(!empty($packages) && count($packages) > 0)
+                                <select name="package_id">
+                                    <option value="">Select Package</option>
+                                    @foreach($packages as $package)
+                                        <option value="{{$package->id}}">{{$package->title}}</option>
+                                    @endforeach
+                                </select>
+                            @endif -->
+                        </div>
+                    </div>
                     <div class="col-sm-12">
                         <div class="input_box">
                             <label><b>Services</b> (Multiple selection allowed)</label>
@@ -128,12 +148,12 @@
                             <!-- <select name="services[]" class="services">
                                 <option value="">Select Service</option> -->
                                 @if(!empty($subCategories) && count($subCategories) > 0)
-                                    <select name="services[]" multiple>
+                                    <select name="services[]" id="services" multiple>
                                         @foreach($subCategories as $subCategory)
                                             @if(!empty($subCategory->services) && count($subCategory->services) > 0)
                                                 <optgroup label="{{$subCategory->title}}">
                                                     @foreach($subCategory->services as $service)
-                                                        <option value="{{$service->id}}">{{$service->title}}</option>
+                                                        <option value="{{$service->id}}" data-price="{{$service->price}}">{{$service->title}} - ₹{{$service->price}}</option>
                                                     @endforeach
                                                 </optgroup>
                                             @endif
@@ -141,20 +161,6 @@
                                     </select>
                                 @endif
                             <!-- </select> -->
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="input_box">
-                            <label><b>Package</b></label>
-                            <div class="error form_error form-error-package_id"></div>
-                                @if(!empty($packages) && count($packages) > 0)
-                                    <select name="package_id">
-                                        <option value="">Select Package</option>
-                                        @foreach($packages as $package)
-                                            <option value="{{$package->id}}">{{$package->title}}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -171,6 +177,11 @@
                             </select>
                         </div>
                     </div>
+                    <!-- <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class=""><b>Total Price</b>: <span class="total_price"></span></div>
+                        </div>
+                    </div> -->
                     <div class="col-sm-12 submit_box">
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
@@ -197,17 +208,64 @@ $(document).ready(function(){
 <script>
 $(document).ready(function () {    
 
+    $(".book_package").on('click', function(){
+        $package_id = $(this).data('id');
+        $package_title = $(this).data('title');
+        $package_price = $(this).data('price');
+        $package_description = $(this).data('description');
+
+        $package_wrapper = $(".booking_form").find('.package_input_wrapper');
+        $package_wrapper.find('[name=package_id]').val($package_id);
+        $package_wrapper.find('[name=package_price]').val($package_price);
+        $package_wrapper.find('.package_title').html($package_title);
+        $package_wrapper.find('.package_services').html($package_description);
+        $package_wrapper.show();
+
+        // updateTotal();
+
+        $(".body_overlay").fadeIn();
+    });
+
     $(".request_callback").on('click', function(){
         $(".body_overlay").fadeIn();
     });
     $(".close_overlay").on('click', function(){
-        $(".body_overlay").fadeOut();
+        $(".form_error").html("");
+        $(".form_error").removeClass("alert alert-danger");
+        $(".body_overlay").fadeOut(400, clearPackage());
     });
     $(".body_overlay").on('click', function(event){
         if (!$(event.target).closest('.request_overlay_box').length) {
-            $(".body_overlay").fadeOut();
+            $(".form_error").html("");
+            $(".form_error").removeClass("alert alert-danger");
+            $(".body_overlay").fadeOut(400, clearPackage());
         }
     });
+
+    // $('#services').on('change', function () {
+    //     updateTotal();
+    // });
+
+    // clearPackage()
+
+    function clearPackage() {
+        $package_wrapper = $(".booking_form").find('.package_input_wrapper');
+        $package_wrapper.find('[name=package_id]').val('');
+        $package_wrapper.find('[name=package_price]').val('');
+        $package_wrapper.find('.package_title').html('');
+        $package_wrapper.find('.package_services').html('');
+        $package_wrapper.hide();
+    }
+
+    // function updateTotal() {
+    //     $booking_form = $(".booking_form");
+    //     $package_price = $booking_form.find('[name=package_price]').val();
+    //     $services_price = 0;
+    //     $('#services option:selected').each(function () {
+    //         $services_price += parseFloat($(this).data('price')) || 0;
+    //     });
+    //     $booking_form.find('.total_price').html($package_price + $services_price);
+    // }
 
     $(".booking_form").on('submit',(function(e){
         $this = $(this);

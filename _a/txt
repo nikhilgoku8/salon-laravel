@@ -36,3 +36,6 @@ booking_items
 	service_id
 	package_id(nullable)
 	price
+
+
+php artisan migrate:refresh --path=/database/migrations/2026_01_01_154848_create_bookings_table.php

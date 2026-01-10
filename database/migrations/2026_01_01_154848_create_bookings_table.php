@@ -30,7 +30,17 @@ return new class extends Migration
             $table->time('end_time');
 
             $table->string('status', 20)->comment('pending, confirmed, cancelled')->default('pending');
-            $table->unique(['slot_id', 'booking_date']);
+            // $table->unique(['slot_id', 'booking_date']);
+            $table->index(['slot_id', 'booking_date']);
+            $table->timestamps();
+        });
+        
+        Schema::create('booking_services', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('booking_id')->constrained('bookings')->onDelete('restrict');
+            $table->foreignId('service_id')->constrained('services')->onDelete('restrict');
+            $table->string('service_name', 100);
+            $table->integer('service_price');
             $table->timestamps();
         });
     }
@@ -40,6 +50,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('booking_items');
         Schema::dropIfExists('bookings');
     }
 };

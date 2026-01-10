@@ -36,11 +36,11 @@
 
 								@if(!empty($category->subCategories) && count($category->subCategories) > 0)
 									@foreach($category->subCategories as $subCategory)
+													@if(!empty($subCategory->services) && count($subCategory->services) > 0)
 										<div class="col-sm-6">
 											<div class="inner_box">
 												<div class="text_box">
 													<div class="sub_title">{{$subCategory->title}}</div>
-													@if(!empty($subCategory->services) && count($subCategory->services) > 0)
 														<ul>
 															@foreach($subCategory->services as $service)
 																<li>
@@ -49,13 +49,14 @@
 																</li>
 															@endforeach
 														</ul>
-													@endif
 												</div>
 												<div class="book_btn">
-													<a href="#">Book</a>
+													<button type="button" class="request_callback">Book</button>
+													<!-- <a href="#">Book</a> -->
 												</div>
 											</div>
 										</div>
+													@endif
 									@endforeach
 								@endif
 
@@ -110,10 +111,16 @@
 													<li>{{$service->title}}</li>
 												@endforeach
 											</ul>
+											<div class="continue_btn">
+												<button type="button" class="book_package" data-id="{{ $package->id }}" data-id="{{ $package->id }}" data-price="{{ $package->price }}" data-title="{{ $package->title }} - ₹{{$service->price}}" 
+													data-description="<ul>
+													@foreach($package->services as $service)
+														<li>{{$service->title}}</li>
+													@endforeach
+												</ul>
+												">Continue</button>
+											</div>
 										@endif
-										<div class="continue_btn">
-											<a href="#">Continue</a>
-										</div>
 									</div>
 								</div>
 							@endforeach
