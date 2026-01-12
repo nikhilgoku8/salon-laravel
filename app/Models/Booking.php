@@ -29,6 +29,11 @@ class Booking extends Model
         return $this->hasMany(BookingService::class);
     }
 
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
     public function timeSlot()
     {
         return $this->belongsTo(TimeSlot::class, 'slot_id');

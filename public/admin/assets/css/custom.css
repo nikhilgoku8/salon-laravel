@@ -3217,3 +3217,28 @@ form[class*="_info_block_form"]{
 /*	border-bottom: 1px solid #000;*/
 
 }
+
+.pending{
+  color: #f38e12;
+  /*background-color: #979042;*/
+  padding: 3px 10px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+}
+.confirmed{
+  color: green;
+  /*background-color: #979042;*/
+  padding: 3px 10px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+}
+.cancelled{
+  color: red;
+  /*background-color: #979042;*/
+  padding: 3px 10px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+}

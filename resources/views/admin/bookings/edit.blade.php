@@ -43,7 +43,7 @@
                             <div class="col-sm-4">
                                 <div class="input_box">
                                     <label>Name</label>
-                                    <input type="text" name="" value="{{ $result->name }}" readonly disabled>
+                                    <input type="text" name="" value="{{ $result->fname.' '.$result->lname }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -58,41 +58,54 @@
                                     <input type="text" name="" value="{{ $result->phone }}" readonly disabled>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <div class="input_box">
+                                    <label>Address</label>
+                                    <textarea readonly disabled>{!! $result->address !!}</textarea>
+                                </div>
+                            </div>
                             <div class="col-sm-4">
                                 <div class="input_box">
                                     <label>Booking Date</label>
                                     <input type="text" name="" value="{{ $result->booking_date }}" readonly disabled>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            @if($result->package_id)
+                            <div class="col-sm-12">
                                 <div class="input_box">
-                                    <label>Specialization</label>
-                                    <input type="text" name="" value="{{ $result->specialization->title }}" readonly disabled>
+                                    <label>Package</label>
+                                    <div>
+                                        {{ $result->package?->title ?? $result->package_title }}
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+                            <div class="col-sm-12">
+                                <div class="input_box">
+                                    <label>Services Including package</label>
+                                    <div>
+                                        @if(!empty($result->bookingServices) && count($result->bookingServices) > 0)
+                                            <ul style="padding: 0 0 0 14px;">
+                                                @foreach($result->bookingServices as $bookingService)
+                                                    <li>
+                                                        {{ $bookingService->service->title }}
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input_box">
-                                    <label>Doctor</label>
-                                    <input type="text" name="" value="{{ $result->doctor->name }}" readonly disabled>
+                                    <label>Total Price</label>
+                                    <input type="text" name="" value="{{ $result->total_price }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="input_box">
                                     <label>Time Slot</label>
-                                    <input type="text" name="" value="{{ $result->timeSlot->start_time }} - {{ $result->timeSlot->end_time }}" readonly disabled>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="input_box">
-                                    <label>Message</label>
-                                    <textarea readonly disabled>{{ $result->message }}</textarea>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="input_box">
-                                    <label>Doctor Remarks</label>
-                                    <div class="error form_error" id="form-error-doctor_remarks"></div>
-                                    <textarea name="doctor_remarks" placeholder="Doctor Remarks*">{{ $result->doctor_remarks ?? '' }}</textarea>
+                                    <input type="text" name="" value="{{ \Carbon\Carbon::parse($result->timeSlot->start_time ?? $result->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($result->timeSlot->end_time ?? $result->end_time)->format('H:i') }}" readonly disabled>
                                 </div>
                             </div>
                             <div class="col-sm-12">

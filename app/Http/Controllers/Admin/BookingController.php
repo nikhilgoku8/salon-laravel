@@ -38,7 +38,7 @@ class BookingController extends Controller
 
         try {
             $validated = $request->validate([
-                'doctor_remarks' => 'required|string',
+                // 'doctor_remarks' => 'required|string',
                 'status' => 'required',
             ]);
 
