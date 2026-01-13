@@ -83,7 +83,7 @@
                                         <td></td> -->
                                         <td>{!! $row->address !!}</td>
                                         <!-- <td>{{ $row->booking_date }}</td> -->
-                                        <td style="white-space: nowrap;">{{ \Carbon\Carbon::parse($row->timeSlot->booking_date)->format('d-m-Y') }}</td>
+                                        <td style="white-space: nowrap;">{{ \Carbon\Carbon::parse($row->booking_date)->format('d-m-Y') }}</td>
                                         <td>{{ $row->package?->title ?? $row->package_title }}</td>
                                         <td>
                                             @if(!empty($row->bookingServices) && count($row->bookingServices) > 0)

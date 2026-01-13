@@ -10,19 +10,19 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $data['result'] = Booking::orderBy('booking_date')->paginate(100);
+        $data['result'] = Booking::orderBy('booking_date')->orderBy('start_time')->paginate(100);
         return view('admin.bookings.index', $data);
     }
 
     public function upcoming()
     {
-        $data['result'] = Booking::orderBy('booking_date')->where('booking_date', '>=', date('Y-m-d'))->paginate(100);
+        $data['result'] = Booking::orderBy('booking_date')->orderBy('start_time')->where('booking_date', '>=', date('Y-m-d'))->paginate(100);
         return view('admin.bookings.index', $data);
     }
 
     public function past()
     {
-        $data['result'] = Booking::orderBy('booking_date')->where('booking_date', '<', date('Y-m-d'))->paginate(100);
+        $data['result'] = Booking::orderBy('booking_date')->orderBy('start_time')->where('booking_date', '<', date('Y-m-d'))->paginate(100);
         return view('admin.bookings.index', $data);
     }
 
