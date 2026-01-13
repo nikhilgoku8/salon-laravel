@@ -4,8 +4,9 @@
   
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Html Framework</title>
-<meta name="description" content="," />
+<title>@if(!empty($meta_title)) {{$meta_title}} @else {{ config('app.name') }} @endif</title>
+<meta name="description" content="@if(!empty($meta_description)) {{$meta_description}} @else {{ config('app.name') }} @endif" />
+<meta name="keywords" content="@if(!empty($meta_keywords)) {{$meta_keywords}} @else {{ config('app.name') }} @endif" />
 
 <link rel="icon" type="icon/png" href="{{ asset('front/images/favicon.png') }}">
 
@@ -100,9 +101,9 @@
             </div>
             <div class="left_side">
                 <div class="call_icon">
-                    <a href="tel:+123-456-7890">
+                    <a href="tel:+919930284924">
                         <span class="icon"><i class="fa-solid fa-headset"></i></span>
-                        <span class="txt">+123-456-7890</span>
+                        <span class="txt">+919930284924</span>
                     </a>
                 </div>
                 <div class="get_appointment">

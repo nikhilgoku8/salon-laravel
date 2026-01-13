@@ -55,9 +55,9 @@
                         </a>
                     </div>
                     <div class="ctc_box">
-                        <a href="#">
+                        <a href="tel:+919930284924">
                             <span class="icon"><i class="fa-solid fa-phone"></i></span>
-                            <span class="txt">123-456-7890</span>
+                            <span class="txt">+919930284924</span>
                         </a>
                     </div>
                     <div class="ctc_box">
