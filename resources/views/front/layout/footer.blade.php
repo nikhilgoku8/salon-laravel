@@ -42,16 +42,16 @@
                     </li>
                 </ul>
                 <div class="ctc_info">
-                    <div class="ctc_box">
+                    <!-- <div class="ctc_box">
                         <a href="#">
                             <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
                             <span class="txt">Plaza X , XY Floor, Street, XYZ</span>
                         </a>
-                    </div>
+                    </div> -->
                     <div class="ctc_box">
-                        <a href="#">
+                        <a href="mailto:enquiry@thesalononwheels.com">
                             <span class="icon"><i class="fa-solid fa-envelope-open"></i></span>
-                            <span class="txt">yourname@email.com</span>
+                            <span class="txt">enquiry@thesalononwheels.com</span>
                         </a>
                     </div>
                     <div class="ctc_box">
