@@ -18,8 +18,10 @@ class LoginController extends Controller
     public function register(){
         $data = array(
             'fname' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('password'),
+            // 'email' => 'admin@gmail.com',
+            // 'password' => Hash::make('password'),
+            'email' => 'admin@thesalononwheels.com',
+            'password' => Hash::make('4A7zo2WNkoFb'),
             'role' => 'superadmin'
         );
         Admin::create($data);
