@@ -12,7 +12,7 @@
                         <div class="heading">Salon Services, Now Just a Doorbell Away.</div>
                         <p>From facials to full-body grooming — get premium beauty services in the comfort of your home.</p>
                         <div class="btn">
-                            <a href="#">Book Your Glow Today</a>
+                            <a href="{{ route('service') }}">Book Your Glow Today</a>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
             <div class="buttons_wrapper">
                 <div class="btn">
                     <span class="btn_one">
-                        <a href="#">Services</a>
+                        <a href="{{ route('service') }}">Services</a>
                     </span>
                     <span class="btn_two">
                         <a href="#">Packages</a>
