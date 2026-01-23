@@ -11,7 +11,13 @@
 		@foreach($mailData['body'] as $key => $value)
 		<tr>
 			<td>{{ $key }}</td>
-			<td>{{ $value }}</td>
+			<td>
+				@if(is_array($value))
+		            {{ implode(', ', $value) }}
+		        @else
+		            {{ $value }}
+		        @endif
+			</td>
 		</tr>
 		@endforeach
 	</table>

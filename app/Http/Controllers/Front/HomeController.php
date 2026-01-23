@@ -117,6 +117,7 @@ class HomeController extends Controller
             ];
 
             $validated = Validator::make($request->all(), $rules, $messages, $attributes)->validated();
+            $mailData['body'] = $validated;
 
             /* ---------------- WORKER AVAILABILITY CHECK ---------------- */
 
@@ -181,6 +182,8 @@ class HomeController extends Controller
 
             $booking = Booking::create($validated);
 
+            $serviceIndex = 0;
+
             /* ---------------- PACKAGE SERVICES ---------------- */
 
             if (!empty($validated['package_id']) && !empty($package->services)) {
@@ -191,6 +194,10 @@ class HomeController extends Controller
                         'service_name'  => $service->title,
                         'service_price' => $service->price,
                     ]);
+
+                    $serviceIndex++;
+                    $mailData['body']['service_name_'.$serviceIndex] = $service->title;
+                    $mailData['body']['service_price_'.$serviceIndex] = $service->price;
                 }
             }
 
@@ -208,6 +215,10 @@ class HomeController extends Controller
                     ]);
 
                     $validated['total_price'] += $service->price;
+
+                    $serviceIndex++;
+                    $mailData['body']['service_name_'.$serviceIndex] = $service->title;
+                    $mailData['body']['service_price_'.$serviceIndex] = $service->price;
                 }
             }
 
@@ -216,6 +227,16 @@ class HomeController extends Controller
             ]);
 
             DB::commit();
+
+            $mailData['body'] = array_merge($mailData['body'], $validated);
+            unset($mailData['body']['package_id']);
+            unset($mailData['body']['slot_id']);
+            unset($mailData['body']['services']);
+            $mailData['subject'] = 'New Appointment';
+
+            // dd($mailData);
+
+            Mail::to('enquiry@thesalononwheels.com')->send(new SendEmail($mailData));
 
             return response()->json([
                 'status'  => 'success',
