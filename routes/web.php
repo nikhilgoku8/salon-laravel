@@ -30,10 +30,10 @@ Route::post('/book', [HomeController::class, 'booking_store'])->name('booking.st
 Route::get('/thank-you', [HomeController::class, 'thank_you'])->name('booking.thank-you');
 Route::post('/get-time-slots', [HomeController::class, 'getTimeSlots'])->name('get-time-slots');
 
-Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
-Route::get('/return-refund-policy', [HomeController::class, 'return_refund_policy'])->name('return_refund_policy');
-Route::get('/terms-and-conditions', [HomeController::class, 'terms_conditions'])->name('terms_conditions');
-Route::get('/shipping-policy', [HomeController::class, 'shipping_policy'])->name('shipping_policy');
+Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy-policy');
+Route::get('/return-refund-policy', [HomeController::class, 'return_refund_policy'])->name('return-refund-policy');
+Route::get('/terms-and-conditions', [HomeController::class, 'terms_conditions'])->name('terms-conditions');
+Route::get('/shipping-policy', [HomeController::class, 'shipping_policy'])->name('shipping-policy');
 
 Route::get('test-mail', [HomeController::class, 'test_mail']);
 

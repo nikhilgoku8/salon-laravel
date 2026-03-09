@@ -69,6 +69,28 @@
                 </div>
                 <div class="copy_right">
                     <p>Copyright © 2025 Salon on wheels. All Rights Reserved.</p>
+                    <ul class="privacy_links">
+                        <li>
+                            <a href="{{ route('privacy-policy') }}">
+                                <span>Privacy Policy</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('return-refund-policy') }}">
+                                <span>Return Refund Policy</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('terms-conditions') }}">
+                                <span>Terms Conditions</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('shipping-policy') }}">
+                                <span>Shipping Policy</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

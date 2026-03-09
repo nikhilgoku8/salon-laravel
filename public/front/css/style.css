@@ -1860,6 +1860,16 @@ footer .footer_info .inner_container .ctc_info .ctc_box:hover a{
 footer .footer_info .inner_container .ctc_info .ctc_box a .icon{
 	padding: 0 10px 0 0;
 }
+footer .footer_info .inner_container .copy_right{
+	display: flex;
+	flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 15px 0;
+}
+footer .footer_info .inner_container .copy_right ul{
+	padding: 10px 0;
+}
 footer .footer_info .inner_container p{
 	font-size: 16px;
 	font-family: "Montserrat", sans-serif;
