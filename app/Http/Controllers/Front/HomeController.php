@@ -58,6 +58,26 @@ class HomeController extends Controller
         return view('front.contact-us');
     }
 
+    public function privacy_policy()
+    {
+        return view('front.privacy-policy');
+    }
+
+    public function return_refund_policy()
+    {
+        return view('front.return-refund-policy');
+    }
+
+    public function terms_conditions()
+    {
+        return view('front.terms-conditions');
+    }
+
+    public function shipping_policy()
+    {
+        return view('front.shipping-policy');
+    }
+
     public function service()
     {
         $data['categories'] = Category::with([

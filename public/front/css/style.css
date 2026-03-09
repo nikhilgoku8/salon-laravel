@@ -1891,6 +1891,36 @@ footer .footer_waves_bottom svg {
 	font-weight: 500;
 	padding: 15px 0;
 }
+
+/*policy_page*/
+.policy_page .inner_container{
+	padding: 5vw 0;
+    text-align: center;
+    min-height: calc(100vh - var(--header-height) - 362px);
+}
+.policy_page .inner_container .heading{
+	margin: 30px 0;
+}
+.policy_page p{
+	font-size: 18px;
+	font-weight: 500;
+	padding: 7px 0;
+	margin: 0;
+	text-align: left;
+}
+.policy_page ul{
+	list-style: disc;
+}
+.policy_page ul li{
+	margin: 0 0 0 15px;
+}
+.policy_page ul li p{
+	font-size: 18px;
+	font-weight: 500;
+	padding: 7px 0;
+	margin: 0;
+	text-align: left;
+}
 .body_overlay {
     background: rgba(0,0,0,0.8);
     position: fixed;
