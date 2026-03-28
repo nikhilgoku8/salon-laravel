@@ -15,6 +15,7 @@
             <li><p>Provide proof of purchase; we’ll inspect and process refunds to your original payment method within 5-10 business days.</p></li>
             <li><p>No returns on opened cosmetics, hygiene products, personalized items, or services already performed.</p></li>
             <li><p>Customers cover return shipping costs; we don’t offer exchanges.</p></li>
+            <li><p>This website, ‘Salon on Wheels’, is owned and operated by Bounty Box LLP. All services, transactions, and data processing on this website are managed under Bounty Box LLP.</p></li>
             </ul>
 
 		</div>

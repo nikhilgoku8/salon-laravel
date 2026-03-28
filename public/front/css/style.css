@@ -1956,6 +1956,8 @@ footer .footer_waves_bottom svg {
     padding: 15px;
     box-shadow: 5px 2px 23px -15px;
     position: relative;
+    max-height: 90vh;
+    overflow: auto;
 
 }
 /*.request_overlay_box [class*=col-sm]{

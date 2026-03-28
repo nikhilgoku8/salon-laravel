@@ -15,7 +15,8 @@
                 <li><p>Your data is used only for service delivery, appointment confirmations, personalized offers (with your consent), and improving our offerings.</p></li>
                 <li><p>We share information solely with essential partners like payment processors and do not sell it to third parties.</p></li>
                 <li><p>All data is secured using encryption, secure servers, and restricted access protocols.</p></li>
-                <li><p>You have the right to access, correct, or delete your data anytime—contact us at [your email/phone] for requests.</p></li>
+                <li><p>You have the right to access, correct, or delete your data anytime—contact us at enquiry@thesalononwheels.com for requests.</p></li>
+                <li><p>This website, ‘Salon on Wheels’, is owned and operated by Bounty Box LLP. All services, transactions, and data processing on this website are managed under Bounty Box LLP.</p></li>
             </ul>
 
 		</div>
