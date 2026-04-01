@@ -188,7 +188,7 @@
                     <div class="col-sm-6">
                         <div class="input_box">
                             <div class="error form_error form-error-booking_date"></div>
-                            <input type="text" name="booking_date" placeholder="Booking Date" class="future_datepicker">
+                            <input type="text" name="booking_date" placeholder="Booking Date" class="future_datepicker" readonly>
                         </div>
                     </div>
                     <div class="col-sm-6 slot_box">
@@ -207,7 +207,8 @@
                     <div class="col-sm-12 submit_box">
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
-                            <button type="submit" class="pink_btn">submit</button>
+                            <button type="submit" class="pink_btn" name="payment_method" value="online">Pay Online</button>
+                            <button type="submit" class="pink_btn" name="payment_method" value="cod">Cash on Delivery</button>
                         </div>
                     </div>
                     <div class="clr"></div>
@@ -289,8 +290,13 @@ $(document).ready(function () {
     //     $booking_form.find('.total_price').html($package_price + $services_price);
     // }
 
-    $(".booking_form").on('submit',(function(e){
-        $this = $(this);
+    $(".booking_form button[type=submit]").on('click',(function(e){
+
+        let form = $(this).closest("form");
+        let formData = new FormData(form[0]);
+
+        formData.append(this.name, this.value);
+
         e.preventDefault();
         $(".form_error").html("");
         $(".form_error").removeClass("alert alert-danger");
@@ -298,7 +304,7 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "{{ route('booking.store') }}",
-            data:  new FormData(this),
+            data:  formData,
             dataType: 'json',
             cache: false,
             contentType: false,
@@ -311,8 +317,8 @@ $(document).ready(function () {
                     let errors = data.responseJSON.errors;
                     $.each(errors, function (key, message) {
                         var fieldName = key.replace(/\./g, '-');
-                        $this.find(".form-error-"+fieldName).html(message);
-                        $this.find(".form-error-"+fieldName).addClass('alert alert-danger');
+                        form.find(".form-error-"+fieldName).html(message);
+                        form.find(".form-error-"+fieldName).addClass('alert alert-danger');
                         // $('#form-error-' + key).html(message).addClass('alert alert-danger');
                     });
                 } else if (data.status === 401) {
@@ -450,12 +456,15 @@ $(document).ready(function() {
 <script src="{{ asset('admin/assets/js/bootstrap-datetimepicker.js') }}"></script>
 <script type="text/javascript">
 
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     $('.future_datepicker').datetimepicker({
-        startDate: new Date(),
+        startDate: tomorrow,
         weekStart: 1,
-        todayBtn:  1,
+        todayBtn:  0,
         autoclose: 1,
-        todayHighlight: 1,
+        todayHighlight: 0,
         startView: 2,
         minView: 2,
         forceParse: 0,
