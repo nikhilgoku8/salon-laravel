@@ -750,6 +750,39 @@ footer .footer_info .inner_container p{
 	width: 50%;
 	padding: 0 0 0 10px;
 }
+
+.form_wrapper .input_box{
+	padding: 0;
+}
+.form_wrapper form [class*="col-"]{
+	width: 100%;
+	padding: 0 0 8px;
+}
+.form_wrapper .input_box input{
+	font-size: 13px;
+	padding: 5px 12px;
+}
+.form_wrapper .input_box select{
+	font-size: 13px;
+	padding: 5px 12px;
+}
+
+.salon_services_section .inner_container .salon_services_boxes .salon_services_type .inner_box .text_box{
+	width: 100%;
+}
+.salon_services_section .inner_container .salon_services_boxes .salon_services_type .inner_box .book_btn{
+	width: 100%;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
 }
 /* Smartphones (landscape) ----------- */
 @media only screen and (min-width : 321px) {

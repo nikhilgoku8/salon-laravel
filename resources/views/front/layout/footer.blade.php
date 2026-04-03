@@ -188,7 +188,7 @@
                     <div class="col-sm-6">
                         <div class="input_box">
                             <div class="error form_error form-error-booking_date"></div>
-                            <input type="text" name="booking_date" placeholder="Booking Date" class="future_datepicker">
+                            <input type="text" name="booking_date" placeholder="Booking Date" class="future_datepicker" readonly>
                         </div>
                     </div>
                     <div class="col-sm-6 slot_box">
@@ -450,12 +450,15 @@ $(document).ready(function() {
 <script src="{{ asset('admin/assets/js/bootstrap-datetimepicker.js') }}"></script>
 <script type="text/javascript">
 
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     $('.future_datepicker').datetimepicker({
-        startDate: new Date(),
+        startDate: tomorrow,
         weekStart: 1,
-        todayBtn:  1,
+        todayBtn:  0,
         autoclose: 1,
-        todayHighlight: 1,
+        todayHighlight: 0,
         startView: 2,
         minView: 2,
         forceParse: 0,

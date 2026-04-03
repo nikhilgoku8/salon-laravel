@@ -16,6 +16,7 @@
                 <li><p>Rest of India: 5-7 days, standard rates apply.</p></li>
                 <li><p>International shipping: 2-4 weeks, with restrictions on certain products.</p></li>
                 <li><p>We’re not liable for delays due to couriers, weather, or holidays; undelivered items follow our return policy.</p></li>
+                <li><p>This website, ‘Salon on Wheels’, is owned and operated by Bounty Box LLP. All services, transactions, and data processing on this website are managed under Bounty Box LLP.</p></li>
             </ul>
 
 		</div>
