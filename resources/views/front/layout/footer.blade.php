@@ -207,7 +207,8 @@
                     <div class="col-sm-12 submit_box">
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
-                            <button type="submit" class="pink_btn">submit</button>
+                            <button type="submit" class="pink_btn" name="payment_method" value="online">Pay Online</button>
+                            <button type="submit" class="pink_btn" name="payment_method" value="cod">Cash on Delivery</button>
                         </div>
                     </div>
                     <div class="clr"></div>
@@ -289,8 +290,13 @@ $(document).ready(function () {
     //     $booking_form.find('.total_price').html($package_price + $services_price);
     // }
 
-    $(".booking_form").on('submit',(function(e){
-        $this = $(this);
+    $(".booking_form button[type=submit]").on('click',(function(e){
+
+        let form = $(this).closest("form")[0];
+        let formData = new FormData(form);
+
+        formData.append(this.name, this.value);
+
         e.preventDefault();
         $(".form_error").html("");
         $(".form_error").removeClass("alert alert-danger");

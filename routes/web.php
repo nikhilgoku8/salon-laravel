@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\PaymentController;
 
 use App\Http\Middleware\IsAdmin;
 
@@ -37,6 +38,9 @@ Route::get('/shipping-policy', [HomeController::class, 'shipping_policy'])->name
 
 Route::get('test-mail', [HomeController::class, 'test_mail']);
 
+Route::get('/payment', [PaymentController::class, 'index']);
+Route::post('/create-order', [PaymentController::class, 'createOrder']);
+Route::post('/verify-payment', [PaymentController::class, 'verifyPayment']);
 
 Route::prefix('swm')->as('admin.')->group(function () {
     

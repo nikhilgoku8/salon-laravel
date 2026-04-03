@@ -250,6 +250,9 @@ svg:not(:root) {
 	color: #1e293b;
 	font-family: 'Montserrat', sans-serif;
 }
+.center{
+    text-align: center;
+}
 
 /*hero_section*/
 .hero_section{
@@ -1971,6 +1974,9 @@ footer .footer_waves_bottom svg {
 }
 .request_overlay_box [class*=col-sm].submit_box{
 	width: 100%;
+}
+.request_overlay_box [class*=col-sm].submit_box button{
+	margin: 10px;
 }
 .request_overlay_box .heading{
     font-size: 18px;
