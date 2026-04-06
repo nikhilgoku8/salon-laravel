@@ -292,8 +292,8 @@ $(document).ready(function () {
 
     $(".booking_form button[type=submit]").on('click',(function(e){
 
-        let form = $(this).closest("form")[0];
-        let formData = new FormData(form);
+        let form = $(this).closest("form");
+        let formData = new FormData(form[0]);
 
         formData.append(this.name, this.value);
 
@@ -304,7 +304,7 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "{{ route('booking.store') }}",
-            data:  new FormData(this),
+            data:  formData,
             dataType: 'json',
             cache: false,
             contentType: false,
@@ -317,8 +317,8 @@ $(document).ready(function () {
                     let errors = data.responseJSON.errors;
                     $.each(errors, function (key, message) {
                         var fieldName = key.replace(/\./g, '-');
-                        $this.find(".form-error-"+fieldName).html(message);
-                        $this.find(".form-error-"+fieldName).addClass('alert alert-danger');
+                        form.find(".form-error-"+fieldName).html(message);
+                        form.find(".form-error-"+fieldName).addClass('alert alert-danger');
                         // $('#form-error-' + key).html(message).addClass('alert alert-danger');
                     });
                 } else if (data.status === 401) {
