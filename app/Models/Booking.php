@@ -19,6 +19,7 @@ class Booking extends Model
         'total_price',
         'slot_id',
         'booking_date',
+        'payment_method',
         'start_time',
         'end_time',
         'status',

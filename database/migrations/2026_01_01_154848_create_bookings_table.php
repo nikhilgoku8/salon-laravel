@@ -21,14 +21,15 @@ return new class extends Migration
             $table->foreignId('package_id')->nullable()->constrained('packages');
             $table->string('package_title', 100)->nullable();
             $table->integer('total_price');
-
+            
             $table->foreignId('slot_id')->constrained('time_slots')->onDelete('restrict');
             $table->date('booking_date');
-
+            $table->string('payment_method', 10)->comment('cod, online')->nullable();
+            
             // Slot snapshot
             $table->time('start_time');
             $table->time('end_time');
-
+            
             $table->string('status', 20)->comment('pending, confirmed, cancelled')->default('pending');
             // $table->unique(['slot_id', 'booking_date']);
             $table->index(['slot_id', 'booking_date']);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Razorpay\Api\Api;
 
 use App\Models\Category;
 use App\Models\TimeSlot;
@@ -13,6 +14,7 @@ use App\Models\Package;
 use App\Models\Booking;
 use App\Models\BookingService;
 use App\Models\Service;
+use App\Models\Payment;
 
 use Mail;
 use App\Mail\SendEmail;
@@ -108,6 +110,26 @@ class HomeController extends Controller
         return view('front.thank-you');
     }
 
+    // Create Razorpay order
+    public function createOrder($orderAmount)
+    {
+        $api = new Api(
+                config('services.razorpay.key'),
+                config('services.razorpay.secret')
+            );
+
+            $order = $api->order->create([
+                'receipt' => 'order_' . time(),
+                'amount' => $orderAmount*100,
+                'currency' => 'INR'
+            ]);
+            
+            // return response()->json($order);
+            // dd($order['id']);
+            
+            return $order['id'];
+    }
+
     public function booking_store(Request $request)
     {
         try {
@@ -121,6 +143,7 @@ class HomeController extends Controller
                 'package_id'   => 'nullable|exists:packages,id',
                 'slot_id'      => 'required|exists:time_slots,id',
                 'booking_date' => 'required|date',
+                'payment_method' => 'required',
                 'services'     => 'required_without:package_id|array|min:1',
                 'services.*'   => 'exists:services,id',
             ];
@@ -134,6 +157,7 @@ class HomeController extends Controller
                 'lname'         => 'last name',
                 'slot_id'       => 'time slot',
                 'package_id'    => 'package',
+                'payment_method'    => 'Payment Method',
             ];
 
             $validated = Validator::make($request->all(), $rules, $messages, $attributes)->validated();
@@ -254,14 +278,37 @@ class HomeController extends Controller
             unset($mailData['body']['services']);
             $mailData['subject'] = 'New Appointment';
 
+            if($validated['payment_method'] == 'online'){
+                try {
+                    $orderCreated = true;
+                    $orderCreateResponse = $this->createOrder($booking->total_price);
+                    Payment::create([
+                        'booking_id' => $booking->id,
+                        'razorpay_order_id' => $orderCreateResponse,
+                        'amount' => $booking->total_price,
+                    ]);
+                } catch (\Exception $e) {
+                    $orderCreated = false;
+                    $orderCreateResponse = $e->getMessage();
+                }
+            }
+
             // dd($mailData);
 
             Mail::to('enquiry@thesalononwheels.com')->send(new SendEmail($mailData));
 
-            return response()->json([
+            $response = [
                 'status'  => 'success',
                 'message' => 'Booking created successfully!',
-            ]);
+                'payment_method' => $validated['payment_method']
+            ];
+
+            if($validated['payment_method'] == 'online'){
+                $response['razorpay_order_created'] = $orderCreated;
+                $response['razorpay_order_id'] = $orderCreateResponse;
+            }
+
+            return response()->json($response);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
 

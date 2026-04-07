@@ -21,18 +21,18 @@ document.getElementById("payBtn").onclick = async function () {
         // body: JSON.stringify({})
     });
     
-    console.log(res);
-    
     const order = await res.json();
+    
+    // console.log(order);
 
     // 2. Open Razorpay
     const options = {
         key: "{{ config('services.razorpay.key') }}",
-        amount: order.amount,
+        // amount: order.amount,
         currency: "INR",
         // name: "Nikhil Store",
         // description: "Test Payment",
-        order_id: order.id,
+        order_id: order,
 
         handler: async function (response) {
 

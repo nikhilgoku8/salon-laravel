@@ -38,4 +38,19 @@ booking_items
 	price
 
 
-php artisan migrate:refresh --path=/database/migrations/2026_01_01_154848_create_bookings_table.php
+php artisan migrate:refresh --path=/database/migrations/2026_04_03_071048_create_payments_table.php
+
+MAIL_MAILER=smtp
+MAIL_HOST="smtp.hostinger.com"
+MAIL_PORT=587
+MAIL_ENCRYPTION=tls
+MAIL_USERNAME="enquiry@thesalononwheels.com"
+MAIL_PASSWORD="@^pbc3aQ^c8"
+MAIL_FROM_ADDRESS="enquiry@thesalononwheels.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
+#RAZORPAY_KEY=rzp_live_SVubQ9HRgrTeWM
+#RAZORPAY_SECRET=mnREKaGMbHxwoXY2h0FwlIXk
+#Test
+RAZORPAY_KEY=rzp_test_Saaks7qodDwDyV
+RAZORPAY_SECRET=dZGFPI5AqZ93oL1QBFnRXy1Y
