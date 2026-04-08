@@ -57,6 +57,7 @@
                     <table>
                         <tbody>
                             <tr>
+                                <th class="col-sm-">Created</th>
                                 <th class="col-sm-2">User Info</th>
                                 <!-- <th class="col-sm-">Email</th>
                                 <th class="col-sm-">Phone</th> -->
@@ -67,11 +68,13 @@
                                 <th class="col-sm-1">Total Price</th>
                                 <th class="col-sm-">Time Slot</th>
                                 <th class="col-sm-">Status</th>
+                                <th class="col-sm-">Payment Method / Status</th>
                                 <th class="col-sm- center">ACTION</th>
                             </tr>
                             @if(!empty($result) && count($result) > 0)
                                 @foreach($result as $row)
                                     <tr>
+                                        <td style="white-space: nowrap;">{{ \Carbon\Carbon::parse($row->created_at)->format('d-m-Y') }}</td>
                                         <td>
                                             {{ $row->fname.' '.$row->lname }}
                                             <br>
@@ -99,6 +102,17 @@
                                         <td>{{ $row->total_price }}</td>
                                         <td>{{ \Carbon\Carbon::parse($row->timeSlot->start_time ?? $row->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($row->timeSlot->end_time ?? $row->end_time)->format('H:i') }}</td>
                                         <td style="white-space: nowrap;" class="{{ strtolower($row->status) }}">{{ strtoupper($row->status) }}</td>
+                                        <td class="center">
+                                            {{ strtoupper($row->payment_method) }}
+                                            @if(!empty($row->payments) && count($row->payments) > 0)
+                                            <br>
+                                            /
+                                            <br>
+                                            <span class="{{ strtolower($row->payments[0]->status) }}" style="white-space: nowrap;">
+                                                {{ $row->payments[0]->status }}
+                                            </span>
+                                            @endif
+                                        </td>
                                         <td class="center">
                                             <a href="{{ route('admin.bookings.edit', $row->id) }}" class="edit_details" style="white-space: nowrap;">Edit</a>
                                             <!-- <br> -->

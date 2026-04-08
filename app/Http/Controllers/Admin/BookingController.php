@@ -10,7 +10,8 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $data['result'] = Booking::orderBy('booking_date')->orderBy('start_time')->paginate(100);
+        // $data['result'] = Booking::with('package')->orderByDesc('booking_date')->orderBy('start_time')->paginate(100);
+        $data['result'] = Booking::with('package')->orderByDesc('created_at')->paginate(100);
         return view('admin.bookings.index', $data);
     }
 

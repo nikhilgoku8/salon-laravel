@@ -19,6 +19,7 @@ class Booking extends Model
         'total_price',
         'slot_id',
         'booking_date',
+        'payment_method',
         'start_time',
         'end_time',
         'status',
@@ -37,5 +38,10 @@ class Booking extends Model
     public function timeSlot()
     {
         return $this->belongsTo(TimeSlot::class, 'slot_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class)->orderByDesc('created_at');
     }
 }

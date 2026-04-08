@@ -227,7 +227,7 @@ $(document).ready(function(){
     $("select").select2();
 });
 </script>
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 $(document).ready(function () {    
 
@@ -310,7 +310,84 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function(result) {
-                location.href="{{ route('booking.thank-you') }}";
+
+                $('.body_overlay .request_overlay_box').html('<div class="heading center">Booking Successful</div>');
+
+                let message = 'Booking Successful';
+                let payment_status = 'completed';
+
+                if(result.payment_method == 'online'){
+
+                    if(result.razorpay_order_created){
+
+                        const options = {
+                            key: "{{ config('services.razorpay.key') }}",
+                            currency: "INR",
+                            order_id: result.razorpay_order_id,
+
+                            handler: async function (response) {
+
+                                console.log("RAZORPAY RESPONSE:", response);
+
+                                // alert("Handler called"); // temporary
+
+                                const verify = await fetch('/verify-payment', {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                    },
+                                    body: JSON.stringify(response)
+                                });
+
+                                const payment_result = await verify.json();
+
+                                if (payment_result.success) {
+                                    message = 'Payment Successful';
+                                    payment_status = 'successful';
+                                } else {
+                                    message = 'Payment Failed';
+                                    payment_status = 'failed';
+                                }
+
+                                // ✅ redirect AFTER payment
+                                window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
+                                    + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                            },
+
+                            modal: {
+                                ondismiss: function () {
+                                    // alert("User closed popup");
+                                    console.log("User closed popup");
+
+                                    let message = "Payment cancelled by user";
+                                    let payment_status = 'cancelled';
+
+                                    window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
+                                        + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                                }
+                            }
+                        };
+
+                        const rzp = new Razorpay(options);
+                        // rzp.on('payment.failed', function (response){
+                        //     console.log("PAYMENT FAILED:", response);
+                        //     alert("Payment failed");
+                        // });
+                        rzp.open();
+
+                        return; // ✅ STOP further execution
+                        // window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
+                        //             + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+
+                    } else {
+                        message = 'Problem with Razorpay Order Creation';
+                    }                    
+                }
+
+                // ✅ only for COD or non-online
+                window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
+                    + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
             },
             error: function(data){
                 if (data.status === 422) {

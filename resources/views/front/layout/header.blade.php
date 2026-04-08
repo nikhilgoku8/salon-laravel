@@ -115,7 +115,7 @@ src="https://www.facebook.com/tr?id=1343157714243342&ev=PageView&noscript=1"
                 </ul>
             </nav>
             <div class="logo">
-                <a href="{{ route('home') }}"><img src="{{ asset('front/images/logo.png') }}" alt="" /></a>
+                <a href="{{ route('home') }}"><img src="{{ asset('front/images/logo.png') }}" alt="Logo" /></a>
             </div>
             <div class="left_side">
                 <div class="call_icon">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
+use App\Models\Payment;
 
 class PaymentController extends Controller
 {
@@ -49,12 +50,24 @@ class PaymentController extends Controller
         $generated_signature = hash_hmac(
             'sha256',
             $data['razorpay_order_id'] . "|" . $data['razorpay_payment_id'],
-            env('RAZORPAY_SECRET')
+            config('services.razorpay.secret')
         );
 
+        $payment = Payment::where('razorpay_order_id', $data['razorpay_order_id'])->first();
+        
         if ($generated_signature === $data['razorpay_signature']) {
+            
+            $payment->update([
+                    'razorpay_payment_id' => $data['razorpay_payment_id'],
+                    'status' => 'successful',
+                ]);
             return response()->json(['success' => true]);
         }
+
+        $payment->update([
+                'razorpay_payment_id' => $data['razorpay_payment_id'],
+                'status' => 'failed',
+            ]);
 
         return response()->json(['success' => false], 400);
     }

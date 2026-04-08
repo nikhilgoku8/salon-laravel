@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('order_id');
-            $table->string('payment_id')->nullable();
+            $table->foreignId('booking_id')->constrained('bookings')->onDelete('cascade');
+            $table->string('razorpay_order_id');
+            $table->string('razorpay_payment_id')->nullable();
             $table->integer('amount');
-            $table->string('status')->default('pending'); // pending, success, failed
+            $table->string('status')->default('pending')->comment('pending, successful, failed	'); // pending, success, failed
             $table->timestamps();
         });
     }
