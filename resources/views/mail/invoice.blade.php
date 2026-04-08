@@ -114,14 +114,15 @@
     </div>
     <div class="invoice-meta">
       <div class="invoice-title">Invoice</div>
-      <div><strong>Invoice No.:</strong> INV-12</div>
-      <div><strong>Date:</strong> 2025-10-24</div>
-      <div><strong>Due Date:</strong> 2025-10-24</div>
+      <div><strong>Invoice No.:</strong> INV-{{ $booking_id }}</div>
+      <div><strong>Date:</strong> {{ \Carbon\Carbon::parse('now')->format('d-m-Y') }}</div>
+      <!-- <div><strong>Due Date:</strong> 2025-10-24</div> -->
     </div>
   </div>
 
   <div class="recipient">
-    <strong>Recipient:</strong><br>Your Client Name<br> Client Address
+    <strong>Recipient:</strong><br>{{ $fname .' '. $lname }}<br> 
+    <span style="max-width: 300px;">{{ $address }}</span>
     <!-- <br>Tax ID: Tax ID -->
   </div>
 
@@ -136,14 +137,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td>1</td><td>Enter item name or description</td><td style="text-align: right;">1</td><td style="text-align: right;">EUR 100.00</td><td style="text-align: right;">EUR 100.00</td></tr><tr><td>2</td><td>Enter item name or description</td><td style="text-align: right;">1</td><td style="text-align: right;">EUR 100.00</td><td style="text-align: right;">EUR 100.00</td></tr>
+      <tr><td>1</td><td>Enter item name or description</td><td style="text-align: right;">1</td><td style="text-align: right;">&#8377; 100.00</td><td style="text-align: right;">&#8377; 100.00</td></tr><tr><td>2</td><td>Enter item name or description</td><td style="text-align: right;">1</td><td style="text-align: right;">&#8377; 100.00</td><td style="text-align: right;">&#8377; 100.00</td></tr>
     </tbody>
   </table>
 
   <div class="totals">
     <table>
-      <tr><td>Subtotal:</td><td style="text-align:right;">&#8377; 200.00</td></tr>
-      <tr><td>VAT (19%):</td><td style="text-align:right;">&#8377; 38.00</td></tr>
+      <!-- <tr><td>Subtotal:</td><td style="text-align:right;">&#8377; 200.00</td></tr>
+      <tr><td>VAT (19%):</td><td style="text-align:right;">&#8377; 38.00</td></tr> -->
       <tr><td><strong>Total:</strong></td><td style="text-align:right;"><strong>&#8377; 238.00</strong></td></tr>
     </table>
   </div>

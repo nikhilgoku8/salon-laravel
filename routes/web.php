@@ -19,10 +19,11 @@ use App\Http\Middleware\IsAdmin;
 // Route::get('/', function () {
 //     return view('invoice');
 // });
-Route::get('/invoice', function () {
-    return view('front.invoice');
-});
+// Route::get('/invoice/{bookingId}', function () {
+//     return view('mail.invoice');
+// });
 // Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
+Route::get('/invoice/{bookingId}', [BookingController::class, 'sendInvoice'] )->name('bookings.index');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about_us');
@@ -45,6 +46,7 @@ Route::get('test-mail', [HomeController::class, 'test_mail']);
 Route::get('/payment', [PaymentController::class, 'index']);
 Route::post('/create-order', [PaymentController::class, 'createOrder']);
 Route::post('/verify-payment', [PaymentController::class, 'verifyPayment']);
+Route::post('/payment-failed', [PaymentController::class, 'markFailed']);
 
 Route::prefix('swm')->as('admin.')->group(function () {
     

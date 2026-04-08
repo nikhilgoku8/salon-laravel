@@ -13,6 +13,7 @@ class Payment extends Model
         'razorpay_order_id',
         'razorpay_payment_id',
         'amount',
+        'error_json',
         'status'
     ];
 

@@ -301,6 +301,9 @@ $(document).ready(function () {
         $(".form_error").html("");
         $(".form_error").removeClass("alert alert-danger");
 
+        var $submitButton = form.find("[type='submit']");
+        $submitButton.attr('disabled', 'disabled');
+
         $.ajax({
             type: "POST",
             url: "{{ route('booking.store') }}",
@@ -310,11 +313,12 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function(result) {
+                $submitButton.removeAttr('disabled');
 
                 $('.body_overlay .request_overlay_box').html('<div class="heading center">Booking Successful</div>');
 
                 let message = 'Booking Successful';
-                let payment_status = 'completed';
+                let payment_status = 'successful';
 
                 if(result.payment_method == 'online'){
 
@@ -343,11 +347,11 @@ $(document).ready(function () {
                                 const payment_result = await verify.json();
 
                                 if (payment_result.success) {
-                                    message = 'Payment Successful';
                                     payment_status = 'successful';
+                                    message = 'Payment Successful';
                                 } else {
-                                    message = 'Payment Failed';
                                     payment_status = 'failed';
+                                    message = 'Payment Failed! Please do not create additional bookings';
                                 }
 
                                 // ✅ redirect AFTER payment
@@ -357,11 +361,25 @@ $(document).ready(function () {
 
                             modal: {
                                 ondismiss: function () {
+
+                                    fetch('/payment-failed', {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                        },
+                                        body: JSON.stringify({
+                                            razorpay_order_id: result.razorpay_order_id,
+                                            status: "cancelled",
+                                            error: "User Cancelled"
+                                        })
+                                    });
+
                                     // alert("User closed popup");
                                     console.log("User closed popup");
 
-                                    let message = "Payment cancelled by user";
                                     let payment_status = 'cancelled';
+                                    let message = "Payment cancelled by user, Please do not create additional bookings";
 
                                     window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
                                         + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
@@ -370,8 +388,33 @@ $(document).ready(function () {
                         };
 
                         const rzp = new Razorpay(options);
+
+                        rzp.on('payment.failed', function (response){
+                            console.log(response?.error ?? null);
+                            fetch('/payment-failed', {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                },
+                                body: JSON.stringify({
+                                    razorpay_order_id: result.razorpay_order_id,
+                                    status: "failed",
+                                    error: response?.error ?? null
+                                })
+                            });
+
+                            payment_status = 'failed';
+                            message = 'Payment Failed! Please do not create additional bookings';
+
+                            window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
+                                + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+
+                        });
+
                         // rzp.on('payment.failed', function (response){
-                        //     console.log("PAYMENT FAILED:", response);
+                        //     // console.log("PAYMENT FAILED:", response);
+                        //     console.log("PAYMENT FAILED:", response?.error || null);
                         //     alert("Payment failed");
                         // });
                         rzp.open();
@@ -381,7 +424,8 @@ $(document).ready(function () {
                         //             + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
 
                     } else {
-                        message = 'Problem with Razorpay Order Creation';
+                        payment_status = 'pending';
+                        message = 'Problem with Razorpay Order Creation, Please do not create additional bookings';
                     }                    
                 }
 
@@ -412,6 +456,8 @@ $(document).ready(function () {
                     alert("Unexpected error: " + data.status);
                     console.log(data);
                 }
+
+                $submitButton.removeAttr('disabled');
             }
         });
 

@@ -68,4 +68,16 @@ class BookingController extends Controller
             ], 500);
         }
     }
+
+    public function sendInvoice($bookingId){
+        $booking = Booking::with('bookingServices.service')->find($bookingId);
+        $mailData = [
+            'booking_id' => $booking->id,
+            'fname' => $booking->fname,
+            'lname' => $booking->lname,
+            'address' => $booking->address,
+        ];
+
+        return view('mail.invoice', $mailData);
+    }
 }

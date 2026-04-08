@@ -71,4 +71,20 @@ class PaymentController extends Controller
 
         return response()->json(['success' => false], 400);
     }
+
+    public function markFailed(Request $request)
+    {
+        $payment = Payment::where('razorpay_order_id', $request->razorpay_order_id)->first();
+
+        if ($payment && !in_array($payment->status, ['successful', 'failed'])) {
+            $payment->update([
+                'status' => $request->status,
+                'error_json' => $request->error 
+                    ? json_encode($request->error) 
+                    : null,
+            ]);
+        }
+
+        return response()->json(['ok' => true]);
+    }
 }

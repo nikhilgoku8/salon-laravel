@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('razorpay_order_id');
             $table->string('razorpay_payment_id')->nullable();
             $table->integer('amount');
-            $table->string('status')->default('pending')->comment('pending, successful, failed	'); // pending, success, failed
+            $table->text('error_json')->nullable();
+            $table->string('status')->default('pending')->comment('pending, successful, cancelled, failed');
             $table->timestamps();
         });
     }
