@@ -295,7 +295,11 @@ class HomeController extends Controller
 
             // dd($mailData);
 
-            Mail::to('enquiry@thesalononwheels.com')->send(new SendEmail($mailData));
+            // Mail::to('enquiry@thesalononwheels.com')->send(new SendEmail($mailData));
+            Mail::to('nikhilgoku8@gmail.com')->send(new SendEmail($mailData));
+
+            // To user as well
+            Mail::to($validated['email'])->send(new SendEmail($mailData));
 
             $response = [
                 'status'  => 'success',

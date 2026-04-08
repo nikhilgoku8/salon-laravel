@@ -17,8 +17,12 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Middleware\IsAdmin;
 
 // Route::get('/', function () {
-//     return view('welcome');
+//     return view('invoice');
 // });
+Route::get('/invoice', function () {
+    return view('front.invoice');
+});
+// Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about_us');

@@ -39,4 +39,9 @@ class Booking extends Model
     {
         return $this->belongsTo(TimeSlot::class, 'slot_id');
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class)->orderByDesc('created_at');
+    }
 }

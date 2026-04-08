@@ -314,8 +314,9 @@ $(document).ready(function () {
                 $('.body_overlay .request_overlay_box').html('<div class="heading center">Booking Successful</div>');
 
                 let message = 'Booking Successful';
+                let payment_status = 'completed';
 
-                if(result.payment_method == 'online'){    
+                if(result.payment_method == 'online'){
 
                     if(result.razorpay_order_created){
 
@@ -328,7 +329,7 @@ $(document).ready(function () {
 
                                 console.log("RAZORPAY RESPONSE:", response);
 
-                                alert("Handler called"); // temporary
+                                // alert("Handler called"); // temporary
 
                                 const verify = await fetch('/verify-payment', {
                                     method: "POST",
@@ -343,26 +344,41 @@ $(document).ready(function () {
 
                                 if (payment_result.success) {
                                     message = 'Payment Successful';
+                                    payment_status = 'successful';
                                 } else {
                                     message = 'Payment Failed';
+                                    payment_status = 'failed';
                                 }
 
                                 // ✅ redirect AFTER payment
                                 window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                                    + result.payment_method + "&message=" + message;
+                                    + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                            },
+
+                            modal: {
+                                ondismiss: function () {
+                                    // alert("User closed popup");
+                                    console.log("User closed popup");
+
+                                    let message = "Payment cancelled by user";
+                                    let payment_status = 'cancelled';
+
+                                    window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
+                                        + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                                }
                             }
                         };
 
                         const rzp = new Razorpay(options);
-                        rzp.on('payment.failed', function (response){
-                            console.log("PAYMENT FAILED:", response);
-                            alert("Payment failed");
-                        });
+                        // rzp.on('payment.failed', function (response){
+                        //     console.log("PAYMENT FAILED:", response);
+                        //     alert("Payment failed");
+                        // });
                         rzp.open();
 
                         return; // ✅ STOP further execution
                         // window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                        //             + result.payment_method + "&message=" + message;
+                        //             + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
 
                     } else {
                         message = 'Problem with Razorpay Order Creation';
@@ -371,7 +387,7 @@ $(document).ready(function () {
 
                 // ✅ only for COD or non-online
                 window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                    + result.payment_method + "&message=" + message;
+                    + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
             },
             error: function(data){
                 if (data.status === 422) {
