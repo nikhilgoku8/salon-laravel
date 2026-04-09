@@ -112,7 +112,7 @@
 												@endforeach
 											</ul>
 											<div class="continue_btn">
-												<button type="button" class="book_package" data-id="{{ $package->id }}" data-id="{{ $package->id }}" data-price="{{ $package->price }}" data-title="{{ $package->title }} - ₹{{$service->price}}" 
+												<button type="button" class="book_package" data-id="{{ $package->id }}" data-id="{{ $package->id }}" data-price="{{ $package->price }}" data-title="{{ $package->title }} - ₹{{$package->price}}" 
 													data-description="<ul>
 													@foreach($package->services as $service)
 														<li>{{$service->title}}</li>

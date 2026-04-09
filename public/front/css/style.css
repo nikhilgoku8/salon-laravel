@@ -1990,6 +1990,9 @@ footer .footer_waves_bottom svg {
     padding-top: 15px;
     border-top: 1px solid #e4e4e4;
 }
+.request_overlay_box .booking_form .total_price{
+    font-size: 1.4em;
+}
 .request_overlay_box .form_enquire_now{
     width: 98%;
     margin: 0 auto;
@@ -2180,4 +2183,7 @@ footer .footer_waves_bottom svg {
 /*package_input_wrapper*/
 .package_input_wrapper{
 	display: none;
+}
+.input_box .select2-container--default .select2-search--inline .select2-search__field{
+    width: 100% !important;
 }

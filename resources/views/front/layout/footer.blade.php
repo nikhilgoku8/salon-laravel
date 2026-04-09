@@ -170,8 +170,7 @@
                             <!-- <select name="services[]" class="services">
                                 <option value="">Select Service</option> -->
                                 @if(!empty($subCategories) && count($subCategories) > 0)
-                                    <select name="services[]" id="services" multiple>
-                                        <option value="" selected disabled>Select Service</option>
+                                    <select name="services[]" id="services" multiple data-placeholder="Select Services">
                                         @foreach($subCategories as $subCategory)
                                             @if(!empty($subCategory->services) && count($subCategory->services) > 0)
                                                 <optgroup label="{{$subCategory->title}}">
@@ -200,11 +199,11 @@
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-sm-6">
+                    <div class="col-sm-6">
                         <div class="input_box">
                             <div class=""><b>Total Price</b>: <span class="total_price"></span></div>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-sm-12 submit_box">
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
@@ -225,7 +224,17 @@
 <script src="{{ asset('admin/assets/plugins/selects_search/select2.min.js') }}"></script>
 <script>
 $(document).ready(function(){
-    $("select").select2();
+    $("select").select2({
+        dropdownParent: $('.body_overlay .booking_form'),
+        allowClear: true,
+        width: '100%'
+    });
+    // $('#services').val(null).trigger('change');
+    // $("#services").select2({
+    //     dropdownParent: $('.body_overlay .booking_form'),
+    //     allowClear: true,
+    //     width: '100%'
+    // });
 });
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -245,7 +254,7 @@ $(document).ready(function () {
         $package_wrapper.find('.package_services').html($package_description);
         $package_wrapper.show();
 
-        // updateTotal();
+        updateTotal();
 
         $(".body_overlay").fadeIn();
     });
@@ -266,10 +275,6 @@ $(document).ready(function () {
         }
     });
 
-    // $('#services').on('change', function () {
-    //     updateTotal();
-    // });
-
     // clearPackage()
 
     function clearPackage() {
@@ -281,15 +286,24 @@ $(document).ready(function () {
         $package_wrapper.hide();
     }
 
-    // function updateTotal() {
-    //     $booking_form = $(".booking_form");
-    //     $package_price = $booking_form.find('[name=package_price]').val();
-    //     $services_price = 0;
-    //     $('#services option:selected').each(function () {
-    //         $services_price += parseFloat($(this).data('price')) || 0;
-    //     });
-    //     $booking_form.find('.total_price').html($package_price + $services_price);
-    // }
+    $('#services').on('change', function () {
+        updateTotal();
+    });
+
+    function updateTotal() {
+        let $booking_form = $(".booking_form");
+
+        let $package_price = parseFloat($booking_form.find('[name=package_price]').val()) || 0;
+
+        let $services_price = 0;
+        $('#services option:selected').each(function () {
+            $services_price += parseFloat($(this).data('price')) || 0;
+        });
+
+        let $total = $package_price + $services_price;
+
+        $booking_form.find('.total_price').html("₹ " + $total);
+    }
 
     $(".booking_form button[type=submit]").on('click',(function(e){
 
