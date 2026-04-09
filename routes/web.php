@@ -23,7 +23,8 @@ use App\Http\Middleware\IsAdmin;
 //     return view('mail.invoice');
 // });
 // Route::get('/invoice', [HomeController::class, 'invoice'])->name('invoice');
-Route::get('/invoice/{bookingId}', [BookingController::class, 'sendInvoice'] )->name('bookings.index');
+Route::get('/view-invoice/{booking}', [BookingController::class, 'viewInvoice'] )->name('view-invoice');
+Route::post('/send-invoice/{booking}', [BookingController::class, 'sendInvoice'] )->name('send-invoice');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about-us', [HomeController::class, 'about_us'])->name('about_us');

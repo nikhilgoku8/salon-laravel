@@ -6,6 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 
+use Illuminate\Support\Facades\Log;
+
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+
+use Mail;
+use App\Mail\SendInvoice;
+
 class BookingController extends Controller
 {
     public function index()
@@ -69,15 +76,67 @@ class BookingController extends Controller
         }
     }
 
-    public function sendInvoice($bookingId){
-        $booking = Booking::with('bookingServices.service')->find($bookingId);
+    public function viewInvoice(Booking $booking){
+        // $booking = Booking::with('bookingServices.service', 'package')->find($bookingId);
+        $mailData['mailData'] = [
+            'booking_id' => $booking->id,
+            'fname' => $booking->fname,
+            'lname' => $booking->lname,
+            'address' => $booking->address,
+            'package' => $booking->package ?? null,
+            'bookingServices' => $booking->bookingServices,
+            'total_price' => $booking->total_price,
+        ];
+
+        return view('mail.invoice', $mailData);
+    }
+
+    public function sendInvoice(Booking $booking){
+        // $booking = Booking::with('bookingServices.service', 'package')->find($bookingId);
         $mailData = [
             'booking_id' => $booking->id,
             'fname' => $booking->fname,
             'lname' => $booking->lname,
             'address' => $booking->address,
+            'package' => $booking->package ?? null,
+            'bookingServices' => $booking->bookingServices,
+            'total_price' => $booking->total_price,
         ];
 
-        return view('mail.invoice', $mailData);
+        try {
+            Mail::to($booking->email)->send(new SendInvoice($mailData));
+        } catch (TransportExceptionInterface $e) {
+
+            \Log::error('Mail transport failed', [
+                'error' => $e->getMessage()
+            ]);
+
+            session()->flash('error', 'Mail server issue ' .  $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Mail server issue'
+            ], 500);
+
+        } catch (\Exception $e) {
+
+            \Log::error('General mail error', [
+                'error' => $e->getMessage()
+            ]);
+
+            session()->flash('error', 'General mail error ' .  $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong'
+            ], 500);
+        }
+
+        session()->flash('success', 'Invoice sent successfully');
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Invoice sent successfully'
+        ]);
     }
 }

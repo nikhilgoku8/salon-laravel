@@ -171,6 +171,7 @@
                                 <option value="">Select Service</option> -->
                                 @if(!empty($subCategories) && count($subCategories) > 0)
                                     <select name="services[]" id="services" multiple>
+                                        <option value="" selected disabled>Select Service</option>
                                         @foreach($subCategories as $subCategory)
                                             @if(!empty($subCategory->services) && count($subCategory->services) > 0)
                                                 <optgroup label="{{$subCategory->title}}">

@@ -14,6 +14,9 @@
                 </div>
                 
                 <div class="right_section">
+                    <div class="purple_filled_btn">
+                        <button id="send_invoice">Send Invoice</button>
+                    </div>
                     <div class="blue_filled_btn">
                         <a href="{{ url()->previous() }}">Back</a>
                     </div>
@@ -187,6 +190,26 @@ $(document).ready(function() {
             }
         });
     }));
+
+  $("#send_invoice").on('click',(function(e){
+    e.preventDefault();
+    var dataID = {{ $result->id }};
+    if (confirm('Are you sure you want to send invoice?')) {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('send-invoice', $result->id) }}",
+            data: {"_token":"{{ csrf_token() }}", "dataID":dataID},
+            dataType: 'json',
+            success: function(response) {
+                window.location.reload(true);
+            },
+            error: function(data){
+                window.location.reload(true);
+            }
+        });
+    }
+
+  }));
 
 });
 </script>

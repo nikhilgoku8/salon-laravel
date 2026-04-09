@@ -39,7 +39,7 @@ class SendInvoice extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'front.invoice',
+            view: 'mail.invoice',
         );
     }
 
