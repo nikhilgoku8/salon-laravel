@@ -119,9 +119,9 @@ src="https://www.facebook.com/tr?id=1343157714243342&ev=PageView&noscript=1"
             </div>
             <div class="left_side">
                 <div class="call_icon">
-                    <a href="tel:+919930284924">
+                    <a href="tel:+919769887715">
                         <span class="icon"><i class="fa-solid fa-headset"></i></span>
-                        <span class="txt">+919930284924</span>
+                        <span class="txt">+919769887715</span>
                     </a>
                 </div>
                 <div class="get_appointment">
