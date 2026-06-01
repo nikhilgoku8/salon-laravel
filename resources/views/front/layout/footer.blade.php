@@ -160,10 +160,16 @@
                             <input type="text" name="email" placeholder="Email">
                         </div>
                     </div>
+                    <div class="col-sm-6">
+                        <div class="input_box">
+                            <div class="error form_error form-error-city"></div>
+                            <input type="text" name="city" placeholder="City: Mumbai Only" disabled>
+                        </div>
+                    </div>
                     <div class="col-sm-12 textarea_box">
                         <div class="input_box">
                             <div class="error form_error form-error-address"></div>
-                            <textarea name="address" placeholder="Address"></textarea>
+                            <textarea name="address" placeholder="Your Mumbai Address"></textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 package_input_wrapper">
@@ -210,6 +216,7 @@
                             <div class="error form_error form-error-all_errors all_errors"></div>
                             <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="online" disabled="disabled">Pay Online <br> (Get 10% Cashback)</button>
                             <!--<button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery</button>-->
+                            <a href="https://api.whatsapp.com/send?phone=+919769887715&text=Get%20yearly%20membership" class="pink_btn">Get Yearly Membership</a>
                         </div>
                     </div>
                     <div class="clr"></div>
