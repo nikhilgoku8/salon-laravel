@@ -240,7 +240,7 @@ class HomeController extends Controller
                     ]);
 
                     $serviceIndex++;
-                    $mailData['body']['service_name_'.$serviceIndex] = $service->title;
+                    $mailData['body']['service_name_'.$serviceIndex] = $service->title .' - '. $service->subCategory->title;
                     $mailData['body']['service_price_'.$serviceIndex] = $service->price;
                 }
             }
@@ -295,11 +295,12 @@ class HomeController extends Controller
 
             // dd($mailData);
 
-            // Mail::to('enquiry@thesalononwheels.com')->send(new SendEmail($mailData));
-            Mail::to('nikhilgoku8@gmail.com')->send(new SendEmail($mailData));
+            Mail::to('janavi@bountyboxinc.com')->send(new SendEmail($mailData));
+            // Mail::to('pravin2227@gmail.com')->send(new SendEmail($mailData));
 
             // To user as well
-            Mail::to($validated['email'])->send(new SendEmail($mailData));
+            // Mail::to($validated['email'])->send(new SendEmail($mailData));
+            // Commented this as no email to user before payment
 
             $response = [
                 'status'  => 'success',

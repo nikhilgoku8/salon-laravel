@@ -46,6 +46,16 @@ th {
     background-color: #104660;
     color: #fff;
 }
+.datetimepicker td, .datetimepicker th {
+    background-color: unset;
+    color: unset;
+    font-size: unset;
+    font-family: unset;
+    border: hidden;
+}
+.datetimepicker table tr td.disabled, .datetimepicker table tr td.disabled:hover {
+    color: #e0e0e0;
+}
 
 a{
 	cursor: pointer;
@@ -53,10 +63,13 @@ a{
 
 p{
 	font-family: "Montserrat", sans-serif;
-	font-size: 18px;
+	font-size: 16px;
     line-height: 28px;
 	color: #54595F;
 	padding: 0 0 15px 0;
+}
+input::placeholder, select::placeholder, textarea::placeholder {
+  font-size: 14px;
 }
 
 /* #Grid system
@@ -1446,7 +1459,7 @@ svg:not(:root) {
     text-align: center;
 }
 .salon_services_section .inner_container .salon_services_boxes .title{
-	font-size: 24px;
+	font-size: 22px;
     font-weight: 600;
     line-height: 1.3em;
     color: #1e293b;
@@ -1482,7 +1495,7 @@ svg:not(:root) {
 	display: flex;
     /*flex-wrap: wrap;*/
     /*align-items: center;*/
-    padding: 0 0 5px 0;
+    padding: 0 0 10px 0;
 }
 .salon_services_section .inner_container .salon_services_boxes .inner_box ul li:last-child{
 	padding: 0;
@@ -1491,7 +1504,7 @@ svg:not(:root) {
 	padding: 3px 0 0 0;
 }
 .salon_services_section .inner_container .salon_services_boxes .inner_box ul li .txt{
-	font-size: 18px;
+	font-size: 14px;
     font-weight: 400;
     line-height: 1.3em;
     color: #334155;
@@ -1529,7 +1542,7 @@ svg:not(:root) {
     font-weight: 500;
     color: #fff;
     background: #FF8CD3;
-    padding: 15px 30px;
+    padding: 8px 30px;
     border-radius: 5px;
     font-family: 'Montserrat', sans-serif;
     transition: all .3s;
@@ -1979,12 +1992,16 @@ footer .footer_waves_bottom svg {
 	margin: 10px;
 }
 .request_overlay_box .heading{
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
     color: #000;
-    padding: 15px 0 10px;
+    padding: 5px 0 5px;
     font-family: 'Inter', sans-serif;
+}
+.request_overlay_box .subheading{
+    font-size: 12px;
+    font-weight: 400;
 }
 .request_overlay_box .booking_form{
     padding-top: 15px;
@@ -1992,6 +2009,9 @@ footer .footer_waves_bottom svg {
 }
 .request_overlay_box .booking_form .total_price{
     font-size: 1.4em;
+}
+.request_overlay_box .booking_form .min_amount{
+    font-size: 0.8em;
 }
 .request_overlay_box .form_enquire_now{
     width: 98%;
@@ -2027,6 +2047,7 @@ footer .footer_waves_bottom svg {
 	cursor: not-allowed;
 	opacity: 0.5;
 	transition: all 0.3s;
+	background: #cdcdcd;
 }
 
 .spinners{

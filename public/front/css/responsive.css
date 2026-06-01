@@ -8,6 +8,7 @@
 .container {
 	width:90%;
 	margin:0 auto;
+	padding: 0;
 }
 }
 @media only screen and (max-width: 1280px) {
@@ -230,11 +231,15 @@ header .inner_container .logo img {
 .hero_section .salon_services_boxes .inner_container .left_side {
     width: 100%;
 }
+.hero_section .salon_services_boxes .inner_container .left_side .heading {
+    font-size: 28px;
+    line-height: 36px; 
+}
 .hero_section .salon_services_boxes .inner_container .left_side .inner_box{
 	text-align: center;
 }
 .hero_section .salon_services_boxes .inner_container .left_side p{
-	font-size: 20px;
+	font-size: 16px;
     line-height: 24px;
     padding: 20px 30px;
     text-align: center;
@@ -501,7 +506,7 @@ footer .footer_info .inner_container p{
 }
 
 .banner{
-	padding: 100px 0;
+	padding: 50px 0;
 	margin: 0;
 }
 .banner .inner_container:before{
@@ -596,7 +601,7 @@ footer .footer_info .inner_container p{
 	width: 100%;
 }
 .salon_services_section{
-	padding: 100px 0 50px;
+	padding: 50px 0 50px;
 }
 .salon_services_section .inner_container .salon_services_img img{
 	width: 90%;
@@ -604,7 +609,7 @@ footer .footer_info .inner_container p{
 .salon_services_section .inner_container .heading{
 	width: 100%;
     margin: -20px auto 0;
-    font-size: 26px;
+    font-size: 20px;
 }
 .salon_services_section .inner_container .salon_services_boxes .title{
 	padding: 20px 0;
@@ -619,9 +624,18 @@ footer .footer_info .inner_container p{
 	width: 20px;
 }
 .salon_services_section .inner_container .salon_services_boxes .inner_box ul li .txt{
-	font-size: 16px;
+	font-size: 14px;
 	padding: 0 0 0 5px;
 	width: calc(100% - 20px);
+}
+.salon_services_section .inner_container .salon_services_boxes .inner_box ul li .txt{
+	font-size: 14px;
+	padding: 0 0 0 5px;
+	width: calc(100% - 70px);
+}
+.salon_services_section .inner_container .salon_services_boxes .inner_box ul li .service_amount{
+	font-size: 14px;
+	width: 50px;
 }
 .salon_services_section .inner_container .salon_services_boxes .inner_box .book_btn{
 	width: 100%;
@@ -775,7 +789,9 @@ footer .footer_info .inner_container p{
 	text-align: center;
 }
 
-
+.pink_btn {
+    font-size:12px;   
+}
 
 
 

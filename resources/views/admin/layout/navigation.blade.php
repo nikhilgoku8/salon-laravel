@@ -85,14 +85,6 @@
                         </li> -->
 
                         <li>
-                            <a href="{{ route('admin.categories.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Categories</a>
-                            <a href="{{ route('admin.sub-categories.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Sub Categories</a>
-                            <a href="{{ route('admin.services.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Services</a>
-                            <a href="{{ route('admin.packages.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Packages</a>
-                            <a href="{{ route('admin.time-slots.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Time Slots</a>
-                        </li>
-
-                        <li>
                             <a><i class="fa fa-medkit" aria-hidden="true"></i> Bookings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="{{ route('admin.bookings.index') }}">All</a></li>
@@ -100,6 +92,14 @@
                                 <li><a href="{{ route('admin.bookings.past') }}">Past</a></li>
                             </ul>
                             <!-- /.nav-second-level -->
+                        </li>
+
+                        <li>
+                            <a href="{{ route('admin.categories.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Categories</a>
+                            <a href="{{ route('admin.sub-categories.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Sub Categories</a>
+                            <a href="{{ route('admin.services.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Services</a>
+                            <a href="{{ route('admin.packages.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Packages</a>
+                            <a href="{{ route('admin.time-slots.index') }}"><i class="fa fa-list-ul" aria-hidden="true"></i> Time Slots</a>
                         </li>
                         
                         

@@ -111,41 +111,19 @@
         <div class="request_overlay_box">
             <div class="form_wrapper">
                 <div class="heading">Book Package / Service</div>
-                <div class="subheading">Minimum order amount is <b>INR 2,000</b></div>
+                <div>Minimum order amount is 1000</div>
                 <form class="booking_form" action="" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <div class="input_box">
-                            <label><b>Services</b> (Multiple selection allowed)</label>
-                            <div class="error form_error form-error-services"></div>
-                            <!-- <select name="services[]" class="services">
-                                <option value="">Select Service</option> -->
-                                @if(!empty($subCategories) && count($subCategories) > 0)
-                                    <select name="services[]" id="services" multiple data-placeholder="Select Services">
-                                        @foreach($subCategories as $subCategory)
-                                            @if(!empty($subCategory->services) && count($subCategory->services) > 0)
-                                                <optgroup label="{{$subCategory->title}}">
-                                                    @foreach($subCategory->services as $service)
-                                                        <option value="{{$service->id}}" data-price="{{$service->price}}">{{$service->title}} - ₹{{$service->price}}</option>
-                                                    @endforeach
-                                                </optgroup>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                @endif
-                            <!-- </select> -->
+                            <div class="error form_error form-error-fname"></div>
+                            <input type="text" name="fname" placeholder="First Name">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="input_box">
-                            <div class="error form_error form-error-fname"></div>
-                            <input type="text" name="fname" placeholder="Name">
-                        </div>
-                    </div>
-                    <div class="col-sm-6" style="display:none;">
-                        <div class="input_box">
                             <div class="error form_error form-error-lname"></div>
-                            <input type="text" name="lname" placeholder="Last Name" value="-">
+                            <input type="text" name="lname" placeholder="Last Name">
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -186,6 +164,28 @@
                             @endif -->
                         </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="input_box">
+                            <label><b>Services</b> (Multiple selection allowed)</label>
+                            <div class="error form_error form-error-services"></div>
+                            <!-- <select name="services[]" class="services">
+                                <option value="">Select Service</option> -->
+                                @if(!empty($subCategories) && count($subCategories) > 0)
+                                    <select name="services[]" id="services" multiple data-placeholder="Select Services">
+                                        @foreach($subCategories as $subCategory)
+                                            @if(!empty($subCategory->services) && count($subCategory->services) > 0)
+                                                <optgroup label="{{$subCategory->title}}">
+                                                    @foreach($subCategory->services as $service)
+                                                        <option value="{{$service->id}}" data-price="{{$service->price}}">{{$service->title}} - ₹{{$service->price}}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                @endif
+                            <!-- </select> -->
+                        </div>
+                    </div>
                     <div class="col-sm-6">
                         <div class="input_box">
                             <div class="error form_error form-error-booking_date"></div>
@@ -202,14 +202,14 @@
                     </div>
                     <div class="col-sm-12">
                         <div class="input_box">
-                            <div class=""><b>Total Price</b>: <span class="total_price"></span> <em class="min_amount">(Min amount 2000)</em> </div>
+                            <div class=""><b>Total Price</b>: <span class="total_price"></span> <em>(Minimum order amount is 1000)</em> </div>
                         </div>
                     </div>
                     <div class="col-sm-12 submit_box">
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
-                            <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="online" disabled="disabled">Pay Online <br> (Get 10% Cashback)</button>
-                            <!--<button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery</button>-->
+                            <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="online" disabled="disabled">Pay Online</button>
+                            <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery</button>
                         </div>
                     </div>
                     <div class="clr"></div>
@@ -268,13 +268,13 @@ $(document).ready(function () {
         $(".form_error").removeClass("alert alert-danger");
         $(".body_overlay").fadeOut(400, clearPackage());
     });
-    // $(".body_overlay").on('click', function(event){
-    //     if (!$(event.target).closest('.request_overlay_box').length) {
-    //         $(".form_error").html("");
-    //         $(".form_error").removeClass("alert alert-danger");
-    //         $(".body_overlay").fadeOut(400, clearPackage());
-    //     }
-    // });
+    $(".body_overlay").on('click', function(event){
+        if (!$(event.target).closest('.request_overlay_box').length) {
+            $(".form_error").html("");
+            $(".form_error").removeClass("alert alert-danger");
+            $(".body_overlay").fadeOut(400, clearPackage());
+        }
+    });
 
     // clearPackage()
 
@@ -304,7 +304,7 @@ $(document).ready(function () {
         let $total = $package_price + $services_price;
         $booking_form.find('.total_price').html("₹ " + $total);
         
-        if($total>=2000){
+        if($total>=1000){
             $('.make_payment_btn').removeAttr('disabled');
         }else{
             $('.make_payment_btn').attr('disabled','disabled');
@@ -601,7 +601,7 @@ $(document).ready(function() {
 <script type="text/javascript">
 
     var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 2);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
     $('.future_datepicker').datetimepicker({
         startDate: tomorrow,
