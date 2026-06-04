@@ -111,8 +111,8 @@ class PaymentController extends Controller
             
             // Send Mail to Admin and User
             try {
-                // Mail::to('janavi@bountyboxinc.com')->send(new SendEmail($mailData));
-                Mail::to('nikhilgoku8@gmail.com')->send(new SendEmail($mailData));
+                Mail::to('janavi@bountyboxinc.com')->send(new SendEmail($mailData));
+                // Mail::to('nikhilgoku8@gmail.com')->send(new SendEmail($mailData));
                 Mail::to($booking->email)->send(new SendEmail($mailData));
             } catch (\Exception $e) {
                 Log::error('Mail sending failed: '.$e->getMessage());
