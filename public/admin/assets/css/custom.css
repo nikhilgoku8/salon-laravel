@@ -3242,3 +3242,11 @@ form[class*="_info_block_form"]{
   font-size: 10px;
   font-weight: 600;
 }
+.failed{
+  color: red;
+  /*background-color: #979042;*/
+  padding: 3px 10px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 600;
+}

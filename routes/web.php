@@ -46,8 +46,8 @@ Route::get('test-mail', [HomeController::class, 'test_mail']);
 
 Route::get('/payment', [PaymentController::class, 'index']);
 Route::post('/create-order', [PaymentController::class, 'createOrder']);
-Route::post('/verify-payment', [PaymentController::class, 'verifyPayment']);
-Route::post('/payment-failed', [PaymentController::class, 'markFailed']);
+Route::post('/verify-payment', [PaymentController::class, 'verifyPayment'])->name('verify-payment');
+Route::post('/payment-failed', [PaymentController::class, 'markFailed'])->name('payment-failed');
 
 Route::prefix('swm')->as('admin.')->group(function () {
     
@@ -71,10 +71,10 @@ Route::prefix('swm')->as('admin.')->group(function () {
         Route::post('services/bulk-delete', [ServiceController::class, 'bulkDelete'])->name('services.bulk-delete');
 
         Route::get('/bookings', [BookingController::class, 'index'] )->name('bookings.index');
-        Route::get('/bookings/upcoming', [BookingController::class, 'upcoming'] )->name('bookings.upcoming');
-        Route::get('/bookings/past', [BookingController::class, 'past'] )->name('bookings.past');
         Route::get('/bookings/edit/{id}', [BookingController::class, 'edit'] )->name('bookings.edit');
         Route::post('/bookings/update/{id}', [BookingController::class, 'update'] )->name('bookings.update');
+        Route::get('/bookings/upcoming/{slug?}', [BookingController::class, 'upcoming'] )->name('bookings.upcoming');
+        Route::get('/bookings/past/{slug?}', [BookingController::class, 'past'] )->name('bookings.past');
 
         Route::get('/change-password', [AdminController::class, 'change_password'] )->name('change-password');
         Route::post('/changePasswordFunction', [AdminController::class, 'changePasswordFunction'] )->name('changePasswordFunction');

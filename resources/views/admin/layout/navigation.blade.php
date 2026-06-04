@@ -88,8 +88,26 @@
                             <a><i class="fa fa-medkit" aria-hidden="true"></i> Bookings<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li><a href="{{ route('admin.bookings.index') }}">All</a></li>
-                                <li><a href="{{ route('admin.bookings.upcoming') }}">Upcoming</a></li>
-                                <li><a href="{{ route('admin.bookings.past') }}">Past</a></li>
+                                {{-- <li><a href="{{ route('admin.bookings.upcoming') }}">Upcoming</a></li>
+                                <li><a href="{{ route('admin.bookings.past') }}">Past</a></li> --}}
+                                <li>
+                                    <a>Upcoming<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="{{ route('admin.bookings.upcoming', 'confirmed') }}">Confirmed</a></li>
+                                        <li><a href="{{ route('admin.bookings.upcoming', 'failed') }}">Failed</a></li>
+                                        <li><a href="{{ route('admin.bookings.upcoming', 'pending') }}">Pending</a></li>
+                                        <li><a href="{{ route('admin.bookings.upcoming', 'cancelled') }}">Cancelled</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a>Past<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href="{{ route('admin.bookings.past', 'confirmed') }}">Confirmed</a></li>
+                                        <li><a href="{{ route('admin.bookings.past', 'failed') }}">Failed</a></li>
+                                        <li><a href="{{ route('admin.bookings.past', 'pending') }}">Pending</a></li>
+                                        <li><a href="{{ route('admin.bookings.past', 'cancelled') }}">Cancelled</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>

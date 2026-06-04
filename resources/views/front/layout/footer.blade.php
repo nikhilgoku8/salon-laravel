@@ -347,6 +347,8 @@ $(document).ready(function () {
 
                 let message = 'Booking Successful';
                 let payment_status = 'successful';
+                const paymentFailedUrl = "{{ route('payment-failed') }}";
+                const verifyPaymentUrl = "{{ route('verify-payment') }}";
 
                 if(result.payment_method == 'online'){
 
@@ -360,10 +362,9 @@ $(document).ready(function () {
                             handler: async function (response) {
 
                                 console.log("RAZORPAY RESPONSE:", response);
-
                                 // alert("Handler called"); // temporary
 
-                                const verify = await fetch('/verify-payment', {
+                                const verify = await fetch(verifyPaymentUrl, {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
@@ -378,6 +379,7 @@ $(document).ready(function () {
                                     payment_status = 'successful';
                                     message = 'Payment Successful';
                                 } else {
+                                    console.log('1');
                                     payment_status = 'failed';
                                     message = 'Payment Failed! Please do not create additional bookings';
                                 }
@@ -390,7 +392,7 @@ $(document).ready(function () {
                             modal: {
                                 ondismiss: function () {
 
-                                    fetch('/payment-failed', {
+                                    fetch(paymentFailedUrl, {
                                         method: "POST",
                                         headers: {
                                             "Content-Type": "application/json",
@@ -405,6 +407,7 @@ $(document).ready(function () {
 
                                     // alert("User closed popup");
                                     console.log("User closed popup");
+                                    console.log('2');
 
                                     let payment_status = 'cancelled';
                                     let message = "Payment cancelled by user, Please do not create additional bookings";
@@ -419,7 +422,7 @@ $(document).ready(function () {
 
                         rzp.on('payment.failed', function (response){
                             console.log(response?.error ?? null);
-                            fetch('/payment-failed', {
+                            fetch(paymentFailedUrl, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -431,6 +434,7 @@ $(document).ready(function () {
                                     error: response?.error ?? null
                                 })
                             });
+                            console.log('3');
 
                             payment_status = 'failed';
                             message = 'Payment Failed! Please do not create additional bookings';
@@ -452,6 +456,7 @@ $(document).ready(function () {
                         //             + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
 
                     } else {
+                        console.log('4');
                         payment_status = 'pending';
                         message = 'Problem with Razorpay Order Creation, Please do not create additional bookings';
                     }                    

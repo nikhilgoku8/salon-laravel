@@ -172,6 +172,7 @@ class HomeController extends Controller
 
             $bookings = Booking::where('booking_date', $validated['booking_date'])
                 ->where('status', '!=', 'cancelled')
+                ->where('status', '!=', 'failed')
                 ->get();
 
             $workerUsage = [];
@@ -447,6 +448,7 @@ class HomeController extends Controller
 
         $bookings = Booking::where('booking_date', $bookingDate)
             ->where('status', '!=', 'cancelled')
+            ->where('status', '!=', 'failed')
             ->get();
 
         $workerUsage = []; // slot_id => workers used

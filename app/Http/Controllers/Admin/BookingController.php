@@ -22,15 +22,23 @@ class BookingController extends Controller
         return view('admin.bookings.index', $data);
     }
 
-    public function upcoming()
+    public function upcoming(?string $slug = null)
     {
-        $data['result'] = Booking::orderBy('booking_date')->orderBy('start_time')->where('booking_date', '>=', date('Y-m-d'))->paginate(100);
+        $data['result'] = Booking::orderBy('booking_date')
+            ->when($slug, fn($q) => $q->where('status', $slug))
+            ->orderBy('start_time')
+            ->where('booking_date', '>=', date('Y-m-d'))
+            ->paginate(100);
         return view('admin.bookings.index', $data);
     }
 
-    public function past()
+    public function past(?string $slug = null)
     {
-        $data['result'] = Booking::orderBy('booking_date')->orderBy('start_time')->where('booking_date', '<', date('Y-m-d'))->paginate(100);
+        $data['result'] = Booking::orderBy('booking_date')
+            ->when($slug, fn($q) => $q->where('status', $slug))
+            ->orderBy('start_time')
+            ->where('booking_date', '<', date('Y-m-d'))
+            ->paginate(100);
         return view('admin.bookings.index', $data);
     }
 

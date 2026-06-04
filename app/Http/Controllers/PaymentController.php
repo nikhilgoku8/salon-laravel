@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Razorpay\Api\Api;
 use App\Models\Payment;
 
+use Mail;
+use App\Mail\SendEmail;
+
 class PaymentController extends Controller
 {
     // Show page
@@ -94,6 +97,10 @@ class PaymentController extends Controller
                 ],
             ];
 
+            if(!$booking->package?->title){
+                unset($mailData['body']['package']);
+            }
+
             $serviceIndex = 0;
 
             foreach ($booking->bookingServices as $bookingService) {
@@ -120,9 +127,9 @@ class PaymentController extends Controller
             ]);
         
         // Delete booking and related data as requested by pravin
-        $payment->booking->bookingServices->each->delete();
-        $payment->booking->delete();
-        $payment->delete();
+        // $payment->booking->bookingServices->each->delete();
+        // $payment->booking->delete();
+        // $payment->delete();
 
         return response()->json(['success' => false], 400);
     }
@@ -137,6 +144,10 @@ class PaymentController extends Controller
                 'error_json' => $request->error 
                     ? json_encode($request->error) 
                     : null,
+            ]);
+
+            $payment->booking->update([
+                'status' => $request->status
             ]);
         }
 

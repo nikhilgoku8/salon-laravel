@@ -30,7 +30,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             
-            $table->string('status', 20)->comment('pending, confirmed, cancelled')->default('pending');
+            $table->string('status', 20)->comment('pending, confirmed, cancelled, failed')->default('pending');
             // $table->unique(['slot_id', 'booking_date']);
             $table->index(['slot_id', 'booking_date']);
             $table->timestamps();
