@@ -296,7 +296,7 @@ class HomeController extends Controller
 
             // dd($mailData);
 
-            Mail::to('janavi@bountyboxinc.com')->send(new SendEmail($mailData));
+            // Mail::to('janavi@bountyboxinc.com')->send(new SendEmail($mailData));
             // Mail::to('pravin2227@gmail.com')->send(new SendEmail($mailData));
 
             // To user as well
