@@ -215,7 +215,7 @@
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
                             <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="online" disabled="disabled">Pay Online <br> (Get 10% Cashback)</button>
-                            <!--<button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery</button>-->
+                            <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery <br> (Pay 15% Advance)</button>
                             <a href="https://api.whatsapp.com/send?phone=+919769887715&text=Get%20yearly%20membership" class="pink_btn">Get Yearly Membership</a>
                         </div>
                     </div>
@@ -350,7 +350,8 @@ $(document).ready(function () {
                 const paymentFailedUrl = "{{ route('payment-failed') }}";
                 const verifyPaymentUrl = "{{ route('verify-payment') }}";
 
-                if(result.payment_method == 'online'){
+                // if(result.payment_method == 'online'){
+                if(result.payment_method == 'online' || result.payment_method == 'cod'){ // added cod as requested by pravin
 
                     if(result.razorpay_order_created){
 

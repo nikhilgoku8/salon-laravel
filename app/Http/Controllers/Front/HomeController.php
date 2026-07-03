@@ -292,6 +292,20 @@ class HomeController extends Controller
                     $orderCreated = false;
                     $orderCreateResponse = $e->getMessage();
                 }
+            }elseif($validated['payment_method'] == 'cod'){ // This is for cod but still partial payment as requested by pravin
+                try {
+                    $orderCreated = true;
+                    $orderCreateResponse = $this->createOrder($booking->total_price * 0.15);
+                    Payment::create([
+                        'booking_id' => $booking->id,
+                        'razorpay_order_id' => $orderCreateResponse,
+                        'amount' => $booking->total_price * 0.15,
+                    ]);
+                } catch (\Exception $e) {
+                    $orderCreated = false;
+                    $orderCreateResponse = $e->getMessage();
+                }
+
             }
 
             // dd($mailData);
@@ -310,6 +324,10 @@ class HomeController extends Controller
             ];
 
             if($validated['payment_method'] == 'online'){
+                $response['razorpay_order_created'] = $orderCreated;
+                $response['razorpay_order_id'] = $orderCreateResponse;
+            }
+            elseif($validated['payment_method'] == 'cod'){ // This is for cod but still partial payment as requested by pravin
                 $response['razorpay_order_created'] = $orderCreated;
                 $response['razorpay_order_id'] = $orderCreateResponse;
             }

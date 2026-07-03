@@ -117,7 +117,7 @@
                                     <div class="img_box">
                                          <img src="{{ asset('front/images/icons/4.png') }}">
                                     </div>
-                                    <div class="title">Services for Women & Men</div>
+                                    <div class="title">Services for Women</div>
                                 </div>
                             </div>
                         </div>

@@ -59,6 +59,7 @@ th {
 
 a{
 	cursor: pointer;
+    display: inline-block;
 }
 
 p{
@@ -2143,6 +2144,7 @@ footer .footer_waves_bottom svg {
     border: none;
     text-transform: capitalize;
     user-select: none;
+    white-space: nowrap;
 }
 .form_error{
 	font-size: 13px;
