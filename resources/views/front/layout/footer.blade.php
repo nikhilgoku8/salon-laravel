@@ -343,17 +343,23 @@ $(document).ready(function () {
             success: function(result) {
                 $submitButton.removeAttr('disabled');
 
-                $('.body_overlay .request_overlay_box').html('<div class="heading center">Booking Successful</div>');
-
                 let message = 'Booking Successful';
                 let payment_status = 'successful';
                 const paymentFailedUrl = "{{ route('payment-failed') }}";
                 const verifyPaymentUrl = "{{ route('verify-payment') }}";
+                const thankYouUrl = "{{ route('booking.thank-you') }}";
 
-                // if(result.payment_method == 'online'){
-                if(result.payment_method == 'online' || result.payment_method == 'cod'){ // added cod as requested by pravin
+                function goToThankYou(mode, status, msg) {
+                    window.location.href = thankYouUrl
+                        + "?payment_mode=" + encodeURIComponent(mode)
+                        + "&payment_status=" + encodeURIComponent(status)
+                        + "&message=" + encodeURIComponent(msg);
+                }
+
+                if(result.payment_method == 'online' || result.payment_method == 'cod'){
 
                     if(result.razorpay_order_created){
+                        let checkoutFinished = false;
 
                         const options = {
                             key: "{{ config('services.razorpay.key') }}",
@@ -361,9 +367,8 @@ $(document).ready(function () {
                             order_id: result.razorpay_order_id,
 
                             handler: async function (response) {
-
+                                checkoutFinished = true;
                                 console.log("RAZORPAY RESPONSE:", response);
-                                // alert("Handler called"); // temporary
 
                                 const verify = await fetch(verifyPaymentUrl, {
                                     method: "POST",
@@ -380,92 +385,88 @@ $(document).ready(function () {
                                     payment_status = 'successful';
                                     message = 'Payment Successful';
                                 } else {
-                                    console.log('1');
                                     payment_status = 'failed';
-                                    message = 'Payment Failed! Please do not create additional bookings';
+                                    message = payment_result.message || 'Payment verification failed. No booking was confirmed.';
                                 }
 
-                                // ✅ redirect AFTER payment
-                                window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                                    + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                                goToThankYou(result.payment_method, payment_status, message);
                             },
 
                             modal: {
-                                ondismiss: function () {
+                                ondismiss: async function () {
+                                    if (checkoutFinished) {
+                                        return;
+                                    }
+                                    checkoutFinished = true;
 
-                                    fetch(paymentFailedUrl, {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                                        },
-                                        body: JSON.stringify({
-                                            razorpay_order_id: result.razorpay_order_id,
-                                            status: "cancelled",
-                                            error: "User Cancelled"
-                                        })
-                                    });
+                                    try {
+                                        await fetch(paymentFailedUrl, {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                            },
+                                            body: JSON.stringify({
+                                                razorpay_order_id: result.razorpay_order_id,
+                                                status: "cancelled",
+                                                error: "User Cancelled"
+                                            })
+                                        });
+                                    } catch (e) {
+                                        console.error(e);
+                                    }
 
-                                    // alert("User closed popup");
-                                    console.log("User closed popup");
-                                    console.log('2');
-
-                                    let payment_status = 'cancelled';
-                                    let message = "Payment cancelled by user, Please do not create additional bookings";
-
-                                    window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                                        + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                                    goToThankYou(
+                                        result.payment_method,
+                                        'cancelled',
+                                        'Payment cancelled. No booking was created.'
+                                    );
                                 }
                             }
                         };
 
                         const rzp = new Razorpay(options);
 
-                        rzp.on('payment.failed', function (response){
+                        rzp.on('payment.failed', async function (response){
+                            if (checkoutFinished) {
+                                return;
+                            }
+                            checkoutFinished = true;
                             console.log(response?.error ?? null);
-                            fetch(paymentFailedUrl, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                                },
-                                body: JSON.stringify({
-                                    razorpay_order_id: result.razorpay_order_id,
-                                    status: "failed",
-                                    error: response?.error ?? null
-                                })
-                            });
-                            console.log('3');
+                            try {
+                                await fetch(paymentFailedUrl, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                                    },
+                                    body: JSON.stringify({
+                                        razorpay_order_id: result.razorpay_order_id,
+                                        status: "failed",
+                                        error: response?.error ?? null
+                                    })
+                                });
+                            } catch (e) {
+                                console.error(e);
+                            }
 
-                            payment_status = 'failed';
-                            message = 'Payment Failed! Please do not create additional bookings';
-
-                            window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                                + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
-
+                            goToThankYou(
+                                result.payment_method,
+                                'failed',
+                                'Payment unsuccessful. No booking was created.'
+                            );
                         });
 
-                        // rzp.on('payment.failed', function (response){
-                        //     // console.log("PAYMENT FAILED:", response);
-                        //     console.log("PAYMENT FAILED:", response?.error || null);
-                        //     alert("Payment failed");
-                        // });
                         rzp.open();
 
-                        return; // ✅ STOP further execution
-                        // window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                        //             + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
-
+                        return;
                     } else {
-                        console.log('4');
-                        payment_status = 'pending';
-                        message = 'Problem with Razorpay Order Creation, Please do not create additional bookings';
-                    }                    
+                        payment_status = 'failed';
+                        message = 'Unable to start payment. No booking was created.';
+                    }
                 }
 
-                // ✅ only for COD or non-online
-                window.location.href = "{{ route('booking.thank-you') }}?payment_mode="
-                    + result.payment_method + "&payment_status=" + payment_status + "&message=" + message;
+                goToThankYou(result.payment_method, payment_status, message);
             },
             error: function(data){
                 if (data.status === 422) {

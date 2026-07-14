@@ -5,16 +5,14 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Razorpay\Api\Api;
 
 use App\Models\Category;
 use App\Models\TimeSlot;
 use App\Models\Package;
 use App\Models\Booking;
-use App\Models\BookingService;
 use App\Models\Service;
-use App\Models\Payment;
 
 use Mail;
 use App\Mail\SendEmail;
@@ -161,7 +159,6 @@ class HomeController extends Controller
             ];
 
             $validated = Validator::make($request->all(), $rules, $messages, $attributes)->validated();
-            $mailData['body'] = $validated;
 
             /* ---------------- WORKER AVAILABILITY CHECK ---------------- */
 
@@ -209,14 +206,13 @@ class HomeController extends Controller
                 ], 422);
             }
 
-            /* ---------------- TRANSACTION START ---------------- */
-
-            DB::beginTransaction();
+            /* Draft checkout: booking is created only after successful payment */
 
             $validated['total_price'] = 0;
+            $package = null;
 
             if (!empty($validated['package_id'])) {
-                $package = Package::findOrFail($validated['package_id']);
+                $package = Package::with('services')->findOrFail($validated['package_id']);
                 $validated['package_title'] = $package->title;
                 $validated['total_price'] += $package->price;
             }
@@ -225,118 +221,78 @@ class HomeController extends Controller
             $validated['start_time'] = $slot->start_time;
             $validated['end_time']   = $slot->end_time;
 
-            $booking = Booking::create($validated);
+            $bookingServices = [];
 
-            $serviceIndex = 0;
-
-            /* ---------------- PACKAGE SERVICES ---------------- */
-
-            if (!empty($validated['package_id']) && !empty($package->services)) {
+            if (!empty($validated['package_id']) && $package && $package->services) {
                 foreach ($package->services as $service) {
-                    BookingService::create([
-                        'booking_id'    => $booking->id,
+                    $bookingServices[] = [
                         'service_id'    => $service->id,
                         'service_name'  => $service->title,
                         'service_price' => $service->price,
-                    ]);
-
-                    $serviceIndex++;
-                    $mailData['body']['service_name_'.$serviceIndex] = $service->title .' - '. $service->subCategory->title;
-                    $mailData['body']['service_price_'.$serviceIndex] = $service->price;
+                    ];
                 }
             }
-
-            /* ---------------- SELECTED SERVICES ---------------- */
 
             if (!empty($validated['services'])) {
                 foreach ($validated['services'] as $serviceId) {
                     $service = Service::findOrFail($serviceId);
 
-                    BookingService::create([
-                        'booking_id'    => $booking->id,
+                    $bookingServices[] = [
                         'service_id'    => $service->id,
                         'service_name'  => $service->title,
                         'service_price' => $service->price,
-                    ]);
+                    ];
 
                     $validated['total_price'] += $service->price;
-
-                    $serviceIndex++;
-                    $mailData['body']['service_name_'.$serviceIndex] = $service->title;
-                    $mailData['body']['service_price_'.$serviceIndex] = $service->price;
                 }
             }
 
-            $booking->update([
-                'total_price' => $validated['total_price']
+            $paymentAmount = $validated['payment_method'] === 'cod'
+                ? (int) round($validated['total_price'] * 0.15)
+                : (int) $validated['total_price'];
+
+            $orderCreated = false;
+            $orderCreateResponse = null;
+
+            try {
+                $orderCreateResponse = $this->createOrder($paymentAmount);
+                $orderCreated = true;
+            } catch (\Exception $e) {
+                $orderCreated = false;
+                $orderCreateResponse = $e->getMessage();
+            }
+
+            if ($orderCreated) {
+                $bookingPayload = collect($validated)->only([
+                    'fname', 'lname', 'email', 'phone', 'address',
+                    'package_id', 'package_title', 'total_price',
+                    'slot_id', 'booking_date', 'payment_method',
+                    'start_time', 'end_time',
+                ])->all();
+
+                Cache::put(
+                    'checkout.'.$orderCreateResponse,
+                    [
+                        'booking' => $bookingPayload,
+                        'booking_services' => $bookingServices,
+                        'payment_amount' => $paymentAmount,
+                        'payment_method' => $validated['payment_method'],
+                    ],
+                    now()->addMinutes(60)
+                );
+            }
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => $orderCreated
+                    ? 'Proceed to payment.'
+                    : 'Unable to start payment. Please try again.',
+                'payment_method' => $validated['payment_method'],
+                'razorpay_order_created' => $orderCreated,
+                'razorpay_order_id' => $orderCreateResponse,
             ]);
 
-            DB::commit();
-
-            $mailData['body'] = array_merge($mailData['body'], $validated);
-            unset($mailData['body']['package_id']);
-            unset($mailData['body']['slot_id']);
-            unset($mailData['body']['services']);
-            $mailData['subject'] = 'New Appointment';
-
-            if($validated['payment_method'] == 'online'){
-                try {
-                    $orderCreated = true;
-                    $orderCreateResponse = $this->createOrder($booking->total_price);
-                    Payment::create([
-                        'booking_id' => $booking->id,
-                        'razorpay_order_id' => $orderCreateResponse,
-                        'amount' => $booking->total_price,
-                    ]);
-                } catch (\Exception $e) {
-                    $orderCreated = false;
-                    $orderCreateResponse = $e->getMessage();
-                }
-            }elseif($validated['payment_method'] == 'cod'){ // This is for cod but still partial payment as requested by pravin
-                try {
-                    $orderCreated = true;
-                    $orderCreateResponse = $this->createOrder($booking->total_price * 0.15);
-                    Payment::create([
-                        'booking_id' => $booking->id,
-                        'razorpay_order_id' => $orderCreateResponse,
-                        'amount' => $booking->total_price * 0.15,
-                    ]);
-                } catch (\Exception $e) {
-                    $orderCreated = false;
-                    $orderCreateResponse = $e->getMessage();
-                }
-
-            }
-
-            // dd($mailData);
-
-            // Mail::to('janavi@bountyboxinc.com')->send(new SendEmail($mailData));
-            // Mail::to('pravin2227@gmail.com')->send(new SendEmail($mailData));
-
-            // To user as well
-            // Mail::to($validated['email'])->send(new SendEmail($mailData));
-            // Commented this as no email to user before payment
-
-            $response = [
-                'status'  => 'success',
-                'message' => 'Booking created successfully!',
-                'payment_method' => $validated['payment_method']
-            ];
-
-            if($validated['payment_method'] == 'online'){
-                $response['razorpay_order_created'] = $orderCreated;
-                $response['razorpay_order_id'] = $orderCreateResponse;
-            }
-            elseif($validated['payment_method'] == 'cod'){ // This is for cod but still partial payment as requested by pravin
-                $response['razorpay_order_created'] = $orderCreated;
-                $response['razorpay_order_id'] = $orderCreateResponse;
-            }
-
-            return response()->json($response);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
-
-            DB::rollBack();
 
             return response()->json([
                 'status'     => 'error',
@@ -345,8 +301,6 @@ class HomeController extends Controller
             ], 422);
 
         } catch (\Exception $e) {
-
-            DB::rollBack();
 
             return response()->json([
                 'status'          => 'error',
