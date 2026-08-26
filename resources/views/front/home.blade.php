@@ -63,7 +63,7 @@
                         <a href="{{ route('service') }}">Services</a>
                     </span>
                     <span class="btn_two">
-                        <a href="#">Packages</a>
+                        <a href="{{ route('service') }}#packages">Packages</a>
                     </span>
                 </div>
             </div>
@@ -202,7 +202,7 @@
                                 <div class="title">Waxing & Threading</div>
                                 <p>Smooth and flawless skin with gentle, precise hair removal.</p>
                                 <div class="btn">
-                                    <a href="#">Book Now</a>
+                                    <a href="{{ route('service') }}">Add to Cart</a>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +216,7 @@
                                 <div class="title">Haircuts, Styling & Colour</div>
                                 <p>From trims to transformations – your perfect look, delivered.</p>
                                 <div class="btn">
-                                    <a href="#">Book Now</a>
+                                    <a href="{{ route('service') }}">Add to Cart</a>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +232,7 @@
                                 <div class="title">Facials & Clean-Ups</div>
                                 <p>Glow up with skin treatments that cleanse, hydrate, and refresh.</p>
                                 <div class="btn">
-                                    <a href="#">Book Now</a>
+                                    <a href="{{ route('service') }}">Add to Cart</a>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +246,7 @@
                                 <div class="title">Manicure & Pedicure</div>
                                 <p>Pamper your hands and feet with relaxing, salon-quality care</p>
                                 <div class="btn">
-                                    <a href="#">Book Now</a>
+                                    <a href="{{ route('service') }}">Add to Cart</a>
                                 </div>
                             </div>
                         </div>
@@ -263,7 +263,7 @@
                             <div class="title">Bridal & Pre-Bridal Packages</div>
                             <p>Look your best for your big day with our all-inclusive bridal beauty services.</p>
                             <div class="btn">
-                                <a href="#">Book Now</a>
+                                <a href="{{ route('service') }}#packages">Add to Cart</a>
                             </div>
                         </div>
                     </div>

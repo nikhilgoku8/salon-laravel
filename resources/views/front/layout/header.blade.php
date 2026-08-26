@@ -127,6 +127,29 @@ src="https://www.facebook.com/tr?id=1424978469390289&ev=PageView&noscript=1"
                 <div class="get_appointment">
                     <a href="#" class="request_callback">GET APPOINTMENT</a>
                 </div>
+                <div class="cart_wrapper">
+                    <button type="button" class="cart_btn" aria-label="Open cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart_count">0</span>
+                    </button>
+                    <div class="cart_overlay">
+                        <div class="cart">
+                            <div class="cart_header">
+                                <div class="cart_heading">Your Cart</div>
+                                <a href="javascript:void(0)" class="close_cart" aria-label="Close cart"></a>
+                            </div>
+                            <div class="cart_items"></div>
+                            <div class="cart_footer">
+                                <div class="cart_total_row">
+                                    <span>Total</span>
+                                    <span class="cart_total_price">₹ 0</span>
+                                </div>
+                                <p class="cart_min_note">Minimum order amount is INR 2,000</p>
+                                <button type="button" class="pink_btn cart_checkout_btn" disabled>Checkout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

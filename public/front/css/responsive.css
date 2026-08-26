@@ -179,7 +179,17 @@ header .logo {
     margin: 0;
 }
 header .inner_container .left_side{
+	display: flex;
+	position: absolute;
+	right: 50px;
+	top: 18px;
+}
+header .inner_container .left_side .call_icon,
+header .inner_container .left_side .get_appointment {
 	display: none;
+}
+header .inner_container .left_side .cart_wrapper {
+	margin-left: 0;
 }
 header nav {
     display: inline-block;
@@ -645,6 +655,17 @@ footer .footer_info .inner_container p{
     text-align: center;
     padding: 12px 26px;
     margin: 20px 0 0;
+}
+.salon_services_section .inner_container .salon_services_boxes .inner_box ul li{
+    flex-wrap: wrap;
+}
+.salon_services_section .inner_container .salon_services_boxes .inner_box ul li .add_cart_btn {
+    width: 100%;
+    margin-left: 0;
+    padding: 8px 0 0;
+}
+.salon_services_section .inner_container .salon_services_boxes .inner_box ul li .add_cart_btn button {
+    width: 100%;
 }
 .pricing_plan_section .inner_container .salon_services_img{
 	width: 90%;

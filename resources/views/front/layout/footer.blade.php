@@ -114,7 +114,7 @@
                 <div class="subheading">Minimum order amount is <b>INR 2,000</b></div>
                 <form class="booking_form" action="" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 services_input_wrapper">
                         <div class="input_box">
                             <label><b>Services</b> (Multiple selection allowed)</label>
                             <div class="error form_error form-error-services"></div>
@@ -174,12 +174,14 @@
                     </div>
                     <div class="col-sm-12 package_input_wrapper">
                         <div class="input_box">
-                            <label><b>Selected Package</b></label>
+                            <label><b>Selected Items</b></label>
                             <div class="error form_error form-error-package_id"></div>
+                            <div class="error form_error form-error-package_ids"></div>
                             <input type="hidden" name="package_id">
                             <input type="hidden" name="package_price">
+                            <div class="package_ids_extra"></div>
                             <div class="package_info">
-                                <div class="package_title">Package Name</div>
+                                <div class="package_title">Your Cart</div>
                                 <div class="package_services"></div>
                             </div>
                             <!-- @if(!empty($packages) && count($packages) > 0)
@@ -215,7 +217,9 @@
                         <div class="input_box center">
                             <div class="error form_error form-error-all_errors all_errors"></div>
                             <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="online" disabled="disabled">Pay Online <br> (Get 10% Cashback)</button>
-                            <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery <br> (Pay 15% Advance)</button>
+                            {{-- Kept for future reuse: Cash on Delivery with 15% advance --}}
+                            <button type="submit" class="pink_btn make_payment_btn cod_advance_payment_btn" name="payment_method" value="cod" disabled="disabled">Cash on Delivery <br> (Pay 15% Advance)</button>
+                            <button type="submit" class="pink_btn make_payment_btn" name="payment_method" value="cod_full" disabled="disabled">Cash on Delivery</button>
                             <a href="https://api.whatsapp.com/send?phone=+919769887715&text=Get%20yearly%20membership" class="pink_btn">Get Yearly Membership</a>
                         </div>
                     </div>
@@ -247,51 +251,226 @@ $(document).ready(function(){
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-$(document).ready(function () {    
+$(document).ready(function () {
 
-    $(".book_package").on('click', function(){
-        $package_id = $(this).data('id');
-        $package_title = $(this).data('title');
-        $package_price = $(this).data('price');
-        $package_description = $(this).data('description');
+    const CART_STORAGE_KEY = 'salon_cart';
+    const CART_MIN_AMOUNT = 2000;
 
-        $package_wrapper = $(".booking_form").find('.package_input_wrapper');
-        $package_wrapper.find('[name=package_id]').val($package_id);
-        $package_wrapper.find('[name=package_price]').val($package_price);
-        $package_wrapper.find('.package_title').html($package_title);
-        $package_wrapper.find('.package_services').html($package_description);
-        $package_wrapper.show();
+    const SalonCart = {
+        getItems: function () {
+            try {
+                const items = JSON.parse(localStorage.getItem(CART_STORAGE_KEY) || '[]');
+                return Array.isArray(items) ? items : [];
+            } catch (e) {
+                return [];
+            }
+        },
+        saveItems: function (items) {
+            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+            this.render();
+        },
+        itemKey: function (type, id) {
+            return String(type) + '-' + String(id);
+        },
+        add: function (item) {
+            const items = this.getItems();
+            const key = this.itemKey(item.type, item.id);
+            if (items.some(function (row) { return SalonCart.itemKey(row.type, row.id) === key; })) {
+                return;
+            }
+            items.push(item);
+            this.saveItems(items);
+        },
+        remove: function (type, id) {
+            const key = this.itemKey(type, id);
+            const items = this.getItems().filter(function (row) {
+                return SalonCart.itemKey(row.type, row.id) !== key;
+            });
+            this.saveItems(items);
+        },
+        clear: function () {
+            this.saveItems([]);
+        },
+        total: function () {
+            return this.getItems().reduce(function (sum, row) {
+                return sum + (parseFloat(row.price) || 0);
+            }, 0);
+        },
+        escapeHtml: function (value) {
+            return $('<div>').text(value == null ? '' : String(value)).html();
+        },
+        render: function () {
+            const items = this.getItems();
+            const total = this.total();
+            const $wrapper = $('.cart_wrapper');
+            const $list = $wrapper.find('.cart_items');
+            const $count = $wrapper.find('.cart_count');
+            const $checkout = $wrapper.find('.cart_checkout_btn');
+
+            $count.text(items.length);
+            $count.toggle(items.length > 0);
+            $wrapper.find('.cart_total_price').text('₹ ' + total);
+
+            if (total >= CART_MIN_AMOUNT && items.length > 0) {
+                $checkout.removeAttr('disabled');
+            } else {
+                $checkout.attr('disabled', 'disabled');
+            }
+
+            if (!items.length) {
+                $list.html('<div class="cart_empty">Your cart is empty</div>');
+            } else {
+                let html = '';
+                items.forEach(function (item) {
+                    html += '<div class="cart_item" data-type="' + SalonCart.escapeHtml(item.type) + '" data-id="' + SalonCart.escapeHtml(item.id) + '">';
+                    html += '<div class="cart_item_info">';
+                    html += '<div class="cart_item_title">' + SalonCart.escapeHtml(item.title) + '</div>';
+                    html += '<div class="cart_item_meta">' + (item.type === 'package' ? 'Package' : 'Service') + '</div>';
+                    html += '</div>';
+                    html += '<div class="cart_item_right">';
+                    html += '<div class="cart_item_price">₹ ' + SalonCart.escapeHtml(item.price) + '</div>';
+                    html += '<button type="button" class="cart_item_remove" aria-label="Remove item">&times;</button>';
+                    html += '</div></div>';
+                });
+                $list.html(html);
+            }
+
+            $('.add_to_cart').each(function () {
+                const $btn = $(this);
+                const key = SalonCart.itemKey($btn.data('type'), $btn.data('id'));
+                const inCart = items.some(function (row) {
+                    return SalonCart.itemKey(row.type, row.id) === key;
+                });
+                $btn.toggleClass('added', inCart);
+                $btn.text(inCart ? 'Added to Cart' : 'Add to Cart');
+            });
+        }
+    };
+
+    function openCart() {
+        $('.cart_wrapper').addClass('open');
+        $('body').addClass('cart_open');
+    }
+
+    function closeCart() {
+        $('.cart_wrapper').removeClass('open');
+        $('body').removeClass('cart_open');
+    }
+
+    function populateFormFromCart() {
+        const items = SalonCart.getItems();
+        const services = items.filter(function (item) { return item.type === 'service'; });
+        const packages = items.filter(function (item) { return item.type === 'package'; });
+        const $form = $('.booking_form');
+        const $wrapper = $form.find('.package_input_wrapper');
+        const serviceIds = services.map(function (item) { return String(item.id); });
+
+        $('#services').val(serviceIds).trigger('change');
+
+        $wrapper.find('.package_ids_extra').empty();
+        $wrapper.find('[name=package_id]').val(packages[0] ? packages[0].id : '');
+        $wrapper.find('[name=package_price]').val(packages.reduce(function (sum, item) {
+            return sum + (parseFloat(item.price) || 0);
+        }, 0));
+
+        packages.forEach(function (item) {
+            $wrapper.find('.package_ids_extra').append(
+                '<input type="hidden" name="package_ids[]" value="' + SalonCart.escapeHtml(item.id) + '">'
+            );
+        });
+
+        if (!items.length) {
+            $wrapper.find('.package_title').html('');
+            $wrapper.find('.package_services').html('');
+            $wrapper.hide();
+        } else {
+            let listHtml = '<ul>';
+            items.forEach(function (item) {
+                listHtml += '<li>' + SalonCart.escapeHtml(item.title) + ' — ₹' + SalonCart.escapeHtml(item.price) + '</li>';
+            });
+            listHtml += '</ul>';
+            $wrapper.find('.package_title').html('Your Cart');
+            $wrapper.find('.package_services').html(listHtml);
+            $wrapper.show();
+        }
 
         updateTotal();
+    }
 
-        $(".body_overlay").fadeIn();
+    function openBookingForm() {
+        if (!SalonCart.getItems().length) {
+            openCart();
+            return;
+        }
+        closeCart();
+        populateFormFromCart();
+        $('.body_overlay').fadeIn();
+    }
+
+    SalonCart.render();
+
+    $(document).on('click', '.add_to_cart', function (e) {
+        e.preventDefault();
+        const $btn = $(this);
+        if ($btn.hasClass('added')) {
+            return;
+        }
+        SalonCart.add({
+            type: String($btn.data('type') || ''),
+            id: $btn.data('id'),
+            title: $btn.data('title') || '',
+            price: parseFloat($btn.data('price')) || 0
+        });
     });
 
-    $(".request_callback").on('click', function(){
-        $(".body_overlay").fadeIn();
+    $('.cart_wrapper .cart_btn').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if ($('.cart_wrapper').hasClass('open')) {
+            closeCart();
+        } else {
+            openCart();
+        }
+    });
+
+    $('.cart_wrapper .close_cart, .cart_wrapper .cart_overlay').on('click', function (e) {
+        if (e.target === this || $(e.target).hasClass('close_cart')) {
+            e.preventDefault();
+            closeCart();
+        }
+    });
+
+    $(document).on('click', '.cart_item_remove', function () {
+        const $item = $(this).closest('.cart_item');
+        SalonCart.remove($item.data('type'), $item.data('id'));
+    });
+
+    $('.cart_checkout_btn').on('click', function () {
+        if (SalonCart.total() < CART_MIN_AMOUNT) {
+            return;
+        }
+        openBookingForm();
+    });
+
+    $(".request_callback").on('click', function(e){
+        e.preventDefault();
+        openBookingForm();
     });
     $(".close_overlay").on('click', function(){
         $(".form_error").html("");
         $(".form_error").removeClass("alert alert-danger");
         $(".body_overlay").fadeOut(400, clearPackage());
     });
-    // $(".body_overlay").on('click', function(event){
-    //     if (!$(event.target).closest('.request_overlay_box').length) {
-    //         $(".form_error").html("");
-    //         $(".form_error").removeClass("alert alert-danger");
-    //         $(".body_overlay").fadeOut(400, clearPackage());
-    //     }
-    // });
-
-    // clearPackage()
 
     function clearPackage() {
         $package_wrapper = $(".booking_form").find('.package_input_wrapper');
         $package_wrapper.find('[name=package_id]').val('');
         $package_wrapper.find('[name=package_price]').val('');
+        $package_wrapper.find('.package_ids_extra').empty();
         $package_wrapper.find('.package_title').html('');
         $package_wrapper.find('.package_services').html('');
         $package_wrapper.hide();
+        $('#services').val(null).trigger('change');
     }
 
     $('#services').on('change', function () {
@@ -350,10 +529,18 @@ $(document).ready(function () {
                 const thankYouUrl = "{{ route('booking.thank-you') }}";
 
                 function goToThankYou(mode, status, msg) {
+                    if (status === 'successful') {
+                        SalonCart.clear();
+                    }
                     window.location.href = thankYouUrl
                         + "?payment_mode=" + encodeURIComponent(mode)
                         + "&payment_status=" + encodeURIComponent(status)
                         + "&message=" + encodeURIComponent(msg);
+                }
+
+                if(result.payment_method == 'cod_full' && result.booking_created){
+                    goToThankYou(result.payment_method, 'successful', result.message || 'Booking Successful');
+                    return;
                 }
 
                 if(result.payment_method == 'online' || result.payment_method == 'cod'){
@@ -554,6 +741,7 @@ window.addEventListener('scroll', function(e){
 }
 window.onload = init();
 </script> -->
+
 <script src="{{ asset('front/js/common.js') }}"></script>
 <script src="{{ asset('front/js/jquery.easing.1.3.js') }}"></script>
 

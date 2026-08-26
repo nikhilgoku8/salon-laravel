@@ -13,6 +13,12 @@ use App\Models\TimeSlot;
 use App\Models\Package;
 use App\Models\Booking;
 use App\Models\Service;
+use App\Models\BookingService;
+use App\Support\BookingMailer;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 use Mail;
 use App\Mail\SendEmail;
@@ -139,10 +145,12 @@ class HomeController extends Controller
                 'phone'        => 'required|numeric|digits:10',
                 'address'      => 'required|string',
                 'package_id'   => 'nullable|exists:packages,id',
+                'package_ids'  => 'nullable|array',
+                'package_ids.*'=> 'exists:packages,id',
                 'slot_id'      => 'required|exists:time_slots,id',
                 'booking_date' => 'required|date',
-                'payment_method' => 'required',
-                'services'     => 'required_without:package_id|array|min:1',
+                'payment_method' => 'required|in:online,cod,cod_full',
+                'services'     => 'required_without_all:package_id,package_ids|array|min:1',
                 'services.*'   => 'exists:services,id',
             ];
 
@@ -209,12 +217,22 @@ class HomeController extends Controller
             /* Draft checkout: booking is created only after successful payment */
 
             $validated['total_price'] = 0;
-            $package = null;
 
-            if (!empty($validated['package_id'])) {
-                $package = Package::with('services')->findOrFail($validated['package_id']);
-                $validated['package_title'] = $package->title;
-                $validated['total_price'] += $package->price;
+            $packageIds = collect([$validated['package_id'] ?? null])
+                ->merge($validated['package_ids'] ?? [])
+                ->filter()
+                ->unique()
+                ->values();
+
+            $packages = Package::with('services')->whereIn('id', $packageIds)->get();
+
+            if ($packages->isNotEmpty()) {
+                $validated['package_id'] = $packages->first()->id;
+                $validated['package_title'] = Str::limit($packages->pluck('title')->implode(', '), 97);
+                $validated['total_price'] += $packages->sum('price');
+            } else {
+                $validated['package_id'] = null;
+                $validated['package_title'] = null;
             }
 
             $slot = TimeSlot::findOrFail($validated['slot_id']);
@@ -223,7 +241,7 @@ class HomeController extends Controller
 
             $bookingServices = [];
 
-            if (!empty($validated['package_id']) && $package && $package->services) {
+            foreach ($packages as $package) {
                 foreach ($package->services as $service) {
                     $bookingServices[] = [
                         'service_id'    => $service->id,
@@ -245,6 +263,53 @@ class HomeController extends Controller
 
                     $validated['total_price'] += $service->price;
                 }
+            }
+
+            $bookingPayload = collect($validated)->only([
+                'fname', 'lname', 'email', 'phone', 'address',
+                'package_id', 'package_title', 'total_price',
+                'slot_id', 'booking_date', 'payment_method',
+                'start_time', 'end_time',
+            ])->all();
+
+            if ($validated['payment_method'] === 'cod_full') {
+                try {
+                    DB::beginTransaction();
+
+                    $bookingPayload['status'] = 'confirmed';
+                    $booking = Booking::create($bookingPayload);
+
+                    foreach ($bookingServices as $serviceRow) {
+                        BookingService::create([
+                            'booking_id'    => $booking->id,
+                            'service_id'    => $serviceRow['service_id'],
+                            'service_name'  => $serviceRow['service_name'],
+                            'service_price' => $serviceRow['service_price'],
+                        ]);
+                    }
+
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::error('COD booking create failed: '.$e->getMessage());
+
+                    return response()->json([
+                        'status'          => 'error',
+                        'error_type'      => 'server',
+                        'message'         => 'Something went wrong. Please try again later.',
+                        'console_message' => $e->getMessage(),
+                    ], 500);
+                }
+
+                BookingMailer::send($booking);
+
+                return response()->json([
+                    'status'  => 'success',
+                    'message' => 'Booking created successfully.',
+                    'payment_method' => $validated['payment_method'],
+                    'razorpay_order_created' => false,
+                    'booking_created' => true,
+                ]);
             }
 
             $paymentAmount = $validated['payment_method'] === 'cod'

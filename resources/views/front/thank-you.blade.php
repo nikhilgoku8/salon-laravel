@@ -25,10 +25,10 @@
 				</div>
 			@endif
 
-			@if(in_array($paymentMode, ['online', 'cod'], true))
+			@if(in_array($paymentMode, ['online', 'cod', 'cod_full'], true))
 				<div>
 					<ul>
-						<li>Payment Mode : {{ strtoupper($paymentMode) }}</li>
+						<li>Payment Mode : {{ $paymentMode === 'cod_full' ? 'COD' : strtoupper($paymentMode) }}</li>
 						<li>Payment Status : {{ strtoupper($paymentStatus) }}</li>
 						@if(request()->query('message'))
 							<li>Message : <b>{{ request()->query('message') }}</b></li>
