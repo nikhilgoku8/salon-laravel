@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 12, 2026 at 06:20 AM
+-- Generation Time: Sep 04, 2026 at 02:18 PM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.16
 
@@ -43,7 +43,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `fname`, `email`, `password`, `role`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@gmail.com', '$2y$12$h04hzwJl6kLDX6T/mo6lWuOF98x2OJjvX6Ph9rZgEpQRu3gRNELAy', 'superadmin', '2026-01-12 05:38:02', '2026-01-09 01:46:36', '2026-01-12 00:08:02');
+(1, 'Admin', 'admin@gmail.com', '$2y$12$h04hzwJl6kLDX6T/mo6lWuOF98x2OJjvX6Ph9rZgEpQRu3gRNELAy', 'superadmin', '2026-07-14 10:59:05', '2026-01-09 01:46:36', '2026-07-14 05:29:05');
 
 -- --------------------------------------------------------
 
@@ -63,12 +63,67 @@ CREATE TABLE `bookings` (
   `total_price` int NOT NULL,
   `slot_id` bigint UNSIGNED NOT NULL,
   `booking_date` date NOT NULL,
+  `payment_method` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'cod, online',
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
-  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending, confirmed, cancelled',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending, confirmed, cancelled, failed',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`id`, `fname`, `lname`, `email`, `phone`, `address`, `package_id`, `package_title`, `total_price`, `slot_id`, `booking_date`, `payment_method`, `start_time`, `end_time`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 2, '2026-01-24', NULL, '10:00:00', '11:00:00', 'pending', '2026-01-23 07:08:42', '2026-01-23 07:08:42'),
+(2, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 2, '2026-01-24', NULL, '10:00:00', '11:00:00', 'pending', '2026-01-23 07:11:35', '2026-01-23 07:11:35'),
+(3, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 3, '2026-01-24', NULL, '11:00:00', '12:00:00', 'pending', '2026-01-23 07:12:43', '2026-01-23 07:12:43'),
+(4, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 3, '2026-01-24', NULL, '11:00:00', '12:00:00', 'pending', '2026-01-23 07:13:16', '2026-01-23 07:13:16'),
+(5, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 4, '2026-01-24', NULL, '12:00:00', '13:00:00', 'pending', '2026-01-23 07:14:35', '2026-01-23 07:14:35'),
+(6, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 1, '2026-01-24', NULL, '09:00:00', '10:00:00', 'cancelled', '2026-01-23 07:16:49', '2026-04-07 05:26:30'),
+(7, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 1, '2026-01-24', NULL, '09:00:00', '10:00:00', 'pending', '2026-01-23 07:19:49', '2026-01-23 07:19:49'),
+(8, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 169, 4, '2026-01-24', NULL, '12:00:00', '13:00:00', 'pending', '2026-01-23 07:45:33', '2026-01-23 07:45:33'),
+(9, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', 3, 'Complete Pre-Bridal – 2 Days', 5848, 5, '2026-01-24', NULL, '13:00:00', '14:00:00', 'pending', '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(10, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 718, 1, '2026-04-15', NULL, '09:00:00', '10:00:00', 'pending', '2026-04-03 02:01:32', '2026-04-03 02:01:32'),
+(11, 'Test', 'LastName', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 1, '2026-04-08', NULL, '09:00:00', '10:00:00', 'pending', '2026-04-07 05:25:19', '2026-04-07 05:25:19'),
+(12, 'TEst', 'LastName', 'nikhilgoku8@gmail.com', '8879161283', '104 Eco House', NULL, NULL, 4, 1, '2026-04-08', 'online', '09:00:00', '10:00:00', 'pending', '2026-04-07 05:27:04', '2026-04-07 05:27:04'),
+(13, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 2, '2026-04-08', 'online', '10:00:00', '11:00:00', 'pending', '2026-04-07 05:29:25', '2026-04-07 05:29:25'),
+(14, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 2, '2026-04-08', 'online', '10:00:00', '11:00:00', 'pending', '2026-04-07 05:30:35', '2026-04-07 05:30:35'),
+(15, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 3, '2026-04-08', 'online', '11:00:00', '12:00:00', 'pending', '2026-04-07 05:38:29', '2026-04-07 05:38:29'),
+(16, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 3, '2026-04-08', 'online', '11:00:00', '12:00:00', 'pending', '2026-04-07 05:47:39', '2026-04-07 05:47:39'),
+(17, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 4, '2026-04-08', 'online', '12:00:00', '13:00:00', 'pending', '2026-04-07 05:51:21', '2026-04-07 05:51:21'),
+(18, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 4, '2026-04-08', 'online', '12:00:00', '13:00:00', 'pending', '2026-04-07 05:54:07', '2026-04-07 05:54:07'),
+(19, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 5, '2026-04-08', 'online', '13:00:00', '14:00:00', 'pending', '2026-04-07 06:20:15', '2026-04-07 06:20:15'),
+(20, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 5, '2026-04-08', 'online', '13:00:00', '14:00:00', 'pending', '2026-04-07 06:25:38', '2026-04-07 06:25:38'),
+(21, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 6, '2026-04-08', 'online', '14:00:00', '15:00:00', 'pending', '2026-04-07 06:31:11', '2026-04-07 06:31:11'),
+(22, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 1, '2026-04-09', 'online', '09:00:00', '10:00:00', 'pending', '2026-04-08 05:29:44', '2026-04-08 05:29:44'),
+(23, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 1, '2026-04-09', 'online', '09:00:00', '10:00:00', 'pending', '2026-04-08 05:31:43', '2026-04-08 05:31:43'),
+(24, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 2, '2026-04-09', 'online', '10:00:00', '11:00:00', 'pending', '2026-04-08 06:21:26', '2026-04-08 06:21:26'),
+(25, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 2, 2, '2026-04-09', 'online', '10:00:00', '11:00:00', 'pending', '2026-04-08 06:22:00', '2026-04-08 06:22:00'),
+(26, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 3, '2026-04-09', 'online', '11:00:00', '12:00:00', 'pending', '2026-04-08 06:22:24', '2026-04-08 06:22:24'),
+(27, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 3, '2026-04-09', 'online', '11:00:00', '12:00:00', 'pending', '2026-04-08 06:40:43', '2026-04-08 06:40:43'),
+(28, 'Water', 'Communications', 'nikhilhemantsonawane@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 4, '2026-04-09', 'online', '12:00:00', '13:00:00', 'pending', '2026-04-08 06:43:25', '2026-04-08 06:43:25'),
+(29, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', 1, 'Party Ready Pack', 2298, 4, '2026-04-09', 'online', '12:00:00', '13:00:00', 'pending', '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(30, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 4, 5, '2026-04-09', 'online', '13:00:00', '14:00:00', 'pending', '2026-04-08 07:17:43', '2026-04-08 07:17:43'),
+(31, 'Water', 'Communications', 'nikhilgoku8@gmail.com', '8879161283', '302, Eco House, Near Udipi Hotel, Goregaon East', NULL, NULL, 551, 6, '2026-04-09', 'online', '14:00:00', '15:00:00', 'pending', '2026-04-08 07:25:54', '2026-04-08 07:25:54'),
+(32, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', 1, 'Party Ready Pack', 2348, 1, '2026-06-04', 'online', '09:00:00', '10:00:00', 'pending', '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(33, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2053, 1, '2026-06-06', 'online', '09:00:00', '10:00:00', 'pending', '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(34, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2398, 1, '2026-06-06', 'online', '09:00:00', '10:00:00', 'pending', '2026-06-04 03:30:14', '2026-06-04 03:30:14'),
+(35, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 3047, 2, '2026-06-06', 'online', '10:00:00', '11:00:00', 'pending', '2026-06-04 03:41:27', '2026-06-04 03:41:27'),
+(36, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2697, 2, '2026-06-06', 'online', '10:00:00', '11:00:00', 'confirmed', '2026-06-04 03:47:21', '2026-06-04 03:48:10'),
+(37, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2596, 3, '2026-06-06', 'online', '11:00:00', '12:00:00', 'pending', '2026-06-04 03:50:10', '2026-06-04 03:50:10'),
+(38, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2497, 3, '2026-06-06', 'online', '11:00:00', '12:00:00', 'confirmed', '2026-06-04 03:50:50', '2026-06-04 03:51:24'),
+(39, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2447, 1, '2026-06-07', 'online', '09:00:00', '10:00:00', 'pending', '2026-06-04 04:01:02', '2026-06-04 04:01:02'),
+(40, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2416, 4, '2026-06-06', 'online', '12:00:00', '13:00:00', 'pending', '2026-06-04 04:33:20', '2026-06-04 04:33:20'),
+(41, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', 1, 'Party Ready Pack', 2001, 4, '2026-06-06', 'online', '12:00:00', '13:00:00', 'cancelled', '2026-06-04 06:24:55', '2026-06-04 06:25:06'),
+(42, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', 2, 'Basic Pre-Bridal – 1 Day', 3848, 4, '2026-06-06', 'online', '12:00:00', '13:00:00', 'failed', '2026-06-04 06:25:32', '2026-06-04 06:25:50'),
+(43, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', 2, 'Basic Pre-Bridal – 1 Day', 3501, 4, '2026-06-06', 'online', '12:00:00', '13:00:00', 'confirmed', '2026-06-04 06:28:46', '2026-06-04 06:29:20'),
+(44, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', 2, 'Basic Pre-Bridal – 1 Day', 3501, 5, '2026-06-06', 'online', '13:00:00', '14:00:00', 'failed', '2026-06-04 06:30:15', '2026-06-04 06:30:39'),
+(45, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2385, 1, '2026-07-05', 'cod', '09:00:00', '10:00:00', 'cancelled', '2026-07-03 08:07:36', '2026-07-03 08:07:47'),
+(46, 'Nikhil', '-', 'nikhilhemantsonawane@gmail.com', '8879161283', 'Plot - 229, Room - 18, Visawa CHS, Gorai -2, Borivali west', NULL, NULL, 2447, 1, '2026-07-05', 'cod', '09:00:00', '10:00:00', 'confirmed', '2026-07-03 08:09:04', '2026-07-03 08:10:21'),
+(47, 'Test', '-', 'nikhilgoku8@gmail.com', '8879161283', 'test', NULL, NULL, 2413, 1, '2026-07-16', 'cod', '09:00:00', '10:00:00', 'confirmed', '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(48, 'Test', '-', 'nikhilgoku8@gmail.com', '8879161283', 'TEst', NULL, NULL, 2447, 1, '2026-07-16', 'online', '09:00:00', '10:00:00', 'confirmed', '2026-07-14 05:34:02', '2026-07-14 05:34:02');
 
 -- --------------------------------------------------------
 
@@ -85,6 +140,138 @@ CREATE TABLE `booking_services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking_services`
+--
+
+INSERT INTO `booking_services` (`id`, `booking_id`, `service_id`, `service_name`, `service_price`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:08:42', '2026-01-23 07:08:42'),
+(2, 2, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:11:35', '2026-01-23 07:11:35'),
+(3, 3, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:12:43', '2026-01-23 07:12:43'),
+(4, 4, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:13:16', '2026-01-23 07:13:16'),
+(5, 5, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:14:35', '2026-01-23 07:14:35'),
+(6, 6, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:16:49', '2026-01-23 07:16:49'),
+(7, 7, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:19:49', '2026-01-23 07:19:49'),
+(8, 8, 3, 'Underarms Regular Wax', 169, '2026-01-23 07:45:33', '2026-01-23 07:45:33'),
+(9, 9, 25, 'Gel Manicure', 799, '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(10, 9, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(11, 9, 21, 'Face + Neck Bleach', 399, '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(12, 9, 28, 'Gel Pedicure', 849, '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(13, 9, 32, 'Hair Spa (Any Length)', 699, '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(14, 9, 2, 'Full Legs Regular Wax', 349, '2026-01-23 07:48:24', '2026-01-23 07:48:24'),
+(15, 10, 3, 'Underarms Regular Wax', 169, '2026-04-03 02:01:32', '2026-04-03 02:01:32'),
+(16, 10, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-04-03 02:01:32', '2026-04-03 02:01:32'),
+(17, 11, 36, 'test 1', 2, '2026-04-07 05:25:19', '2026-04-07 05:25:19'),
+(18, 11, 37, 'test 2', 2, '2026-04-07 05:25:19', '2026-04-07 05:25:19'),
+(19, 12, 36, 'test 1', 2, '2026-04-07 05:27:04', '2026-04-07 05:27:04'),
+(20, 12, 37, 'test 2', 2, '2026-04-07 05:27:04', '2026-04-07 05:27:04'),
+(21, 13, 36, 'test 1', 2, '2026-04-07 05:29:25', '2026-04-07 05:29:25'),
+(22, 13, 37, 'test 2', 2, '2026-04-07 05:29:25', '2026-04-07 05:29:25'),
+(23, 14, 36, 'test 1', 2, '2026-04-07 05:30:35', '2026-04-07 05:30:35'),
+(24, 14, 37, 'test 2', 2, '2026-04-07 05:30:35', '2026-04-07 05:30:35'),
+(25, 15, 36, 'test 1', 2, '2026-04-07 05:38:29', '2026-04-07 05:38:29'),
+(26, 15, 37, 'test 2', 2, '2026-04-07 05:38:29', '2026-04-07 05:38:29'),
+(27, 16, 36, 'test 1', 2, '2026-04-07 05:47:39', '2026-04-07 05:47:39'),
+(28, 16, 37, 'test 2', 2, '2026-04-07 05:47:39', '2026-04-07 05:47:39'),
+(29, 17, 36, 'test 1', 2, '2026-04-07 05:51:21', '2026-04-07 05:51:21'),
+(30, 18, 36, 'test 1', 2, '2026-04-07 05:54:07', '2026-04-07 05:54:07'),
+(31, 19, 36, 'test 1', 2, '2026-04-07 06:20:15', '2026-04-07 06:20:15'),
+(32, 20, 36, 'test 1', 2, '2026-04-07 06:25:38', '2026-04-07 06:25:38'),
+(33, 21, 36, 'test 1', 2, '2026-04-07 06:31:11', '2026-04-07 06:31:11'),
+(34, 22, 36, 'test 1', 2, '2026-04-08 05:29:44', '2026-04-08 05:29:44'),
+(35, 23, 36, 'test 1', 2, '2026-04-08 05:31:43', '2026-04-08 05:31:43'),
+(36, 23, 37, 'test 2', 2, '2026-04-08 05:31:43', '2026-04-08 05:31:43'),
+(37, 24, 36, 'test 1', 2, '2026-04-08 06:21:26', '2026-04-08 06:21:26'),
+(38, 24, 37, 'test 2', 2, '2026-04-08 06:21:26', '2026-04-08 06:21:26'),
+(39, 25, 36, 'test 1', 2, '2026-04-08 06:22:00', '2026-04-08 06:22:00'),
+(40, 26, 36, 'test 1', 2, '2026-04-08 06:22:24', '2026-04-08 06:22:24'),
+(41, 26, 37, 'test 2', 2, '2026-04-08 06:22:24', '2026-04-08 06:22:24'),
+(42, 27, 36, 'test 1', 2, '2026-04-08 06:40:43', '2026-04-08 06:40:43'),
+(43, 27, 37, 'test 2', 2, '2026-04-08 06:40:43', '2026-04-08 06:40:43'),
+(44, 28, 36, 'test 1', 2, '2026-04-08 06:43:25', '2026-04-08 06:43:25'),
+(45, 28, 37, 'test 2', 2, '2026-04-08 06:43:25', '2026-04-08 06:43:25'),
+(46, 29, 16, 'Eyebrows Threading', 149, '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(47, 29, 12, 'Gold Facial', 799, '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(48, 29, 26, 'Classic Pedicure', 599, '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(49, 29, 30, 'Blow Dry', 399, '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(50, 29, 31, 'Hair Ironing', 499, '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(51, 29, 1, 'Full Arms Regular Wax', 299, '2026-04-08 06:46:31', '2026-04-08 06:46:31'),
+(52, 30, 36, 'test 1', 2, '2026-04-08 07:17:43', '2026-04-08 07:17:43'),
+(53, 30, 37, 'test 2', 2, '2026-04-08 07:17:43', '2026-04-08 07:17:43'),
+(54, 31, 36, 'test 1', 2, '2026-04-08 07:25:54', '2026-04-08 07:25:54'),
+(55, 31, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-04-08 07:25:54', '2026-04-08 07:25:54'),
+(56, 32, 16, 'Eyebrows Threading', 149, '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(57, 32, 12, 'Gold Facial', 799, '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(58, 32, 26, 'Classic Pedicure', 599, '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(59, 32, 30, 'Blow Dry', 399, '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(60, 32, 31, 'Hair Ironing', 499, '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(61, 32, 2, 'Full Legs Regular Wax', 349, '2026-06-02 08:33:12', '2026-06-02 08:33:12'),
+(62, 33, 1, 'Full Arms Regular Wax', 299, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(63, 33, 2, 'Full Legs Regular Wax', 349, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(64, 33, 3, 'Underarms Regular Wax', 169, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(65, 33, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(66, 33, 16, 'Eyebrows Threading', 149, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(67, 33, 18, 'Forehead Threading', 139, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(68, 33, 29, 'Haircut (Any Length)', 399, '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(69, 34, 15, 'Anti-Ageing Facial', 1299, '2026-06-04 03:30:14', '2026-06-04 03:30:14'),
+(70, 34, 35, 'Global Hair Colour – Long Hair', 1099, '2026-06-04 03:30:14', '2026-06-04 03:30:14'),
+(71, 35, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-06-04 03:41:27', '2026-06-04 03:41:27'),
+(72, 35, 11, 'Fruit Facial', 649, '2026-06-04 03:41:27', '2026-06-04 03:41:27'),
+(73, 35, 15, 'Anti-Ageing Facial', 1299, '2026-06-04 03:41:27', '2026-06-04 03:41:27'),
+(74, 36, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 03:47:21', '2026-06-04 03:47:21'),
+(75, 36, 9, 'Detan Cleanup', 499, '2026-06-04 03:47:21', '2026-06-04 03:47:21'),
+(76, 36, 37, 'test 2', 2, '2026-06-04 03:47:21', '2026-06-04 03:47:21'),
+(77, 36, 16, 'Eyebrows Threading', 149, '2026-06-04 03:47:21', '2026-06-04 03:47:21'),
+(78, 36, 29, 'Haircut (Any Length)', 399, '2026-06-04 03:47:21', '2026-06-04 03:47:21'),
+(79, 36, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-06-04 03:47:21', '2026-06-04 03:47:21'),
+(80, 37, 2, 'Full Legs Regular Wax', 349, '2026-06-04 03:50:10', '2026-06-04 03:50:10'),
+(81, 37, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 03:50:10', '2026-06-04 03:50:10'),
+(82, 37, 24, 'Detan Manicure', 599, '2026-06-04 03:50:10', '2026-06-04 03:50:10'),
+(83, 37, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-06-04 03:50:10', '2026-06-04 03:50:10'),
+(84, 38, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 03:50:50', '2026-06-04 03:50:50'),
+(85, 38, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-06-04 03:50:50', '2026-06-04 03:50:50'),
+(86, 38, 28, 'Gel Pedicure', 849, '2026-06-04 03:50:50', '2026-06-04 03:50:50'),
+(87, 39, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 04:01:02', '2026-06-04 04:01:02'),
+(88, 39, 25, 'Gel Manicure', 799, '2026-06-04 04:01:02', '2026-06-04 04:01:02'),
+(89, 39, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-06-04 04:01:02', '2026-06-04 04:01:02'),
+(90, 40, 3, 'Underarms Regular Wax', 169, '2026-06-04 04:33:20', '2026-06-04 04:33:20'),
+(91, 40, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 04:33:20', '2026-06-04 04:33:20'),
+(92, 40, 10, 'Fruit Cleanup', 599, '2026-06-04 04:33:20', '2026-06-04 04:33:20'),
+(93, 40, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-06-04 04:33:20', '2026-06-04 04:33:20'),
+(94, 41, 16, 'Eyebrows Threading', 149, '2026-06-04 06:24:55', '2026-06-04 06:24:55'),
+(95, 41, 12, 'Gold Facial', 799, '2026-06-04 06:24:55', '2026-06-04 06:24:55'),
+(96, 41, 26, 'Classic Pedicure', 599, '2026-06-04 06:24:55', '2026-06-04 06:24:55'),
+(97, 41, 30, 'Blow Dry', 399, '2026-06-04 06:24:55', '2026-06-04 06:24:55'),
+(98, 41, 31, 'Hair Ironing', 499, '2026-06-04 06:24:55', '2026-06-04 06:24:55'),
+(99, 41, 36, 'test 1', 2, '2026-06-04 06:24:55', '2026-06-04 06:24:55'),
+(100, 42, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 06:25:32', '2026-06-04 06:25:32'),
+(101, 42, 12, 'Gold Facial', 799, '2026-06-04 06:25:32', '2026-06-04 06:25:32'),
+(102, 42, 2, 'Full Legs Regular Wax', 349, '2026-06-04 06:25:32', '2026-06-04 06:25:32'),
+(103, 43, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 06:28:46', '2026-06-04 06:28:46'),
+(104, 43, 12, 'Gold Facial', 799, '2026-06-04 06:28:46', '2026-06-04 06:28:46'),
+(105, 43, 36, 'test 1', 2, '2026-06-04 06:28:46', '2026-06-04 06:28:46'),
+(106, 44, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-06-04 06:30:15', '2026-06-04 06:30:15'),
+(107, 44, 12, 'Gold Facial', 799, '2026-06-04 06:30:15', '2026-06-04 06:30:15'),
+(108, 44, 36, 'test 1', 2, '2026-06-04 06:30:15', '2026-06-04 06:30:15'),
+(109, 45, 1, 'Full Arms Regular Wax', 299, '2026-07-03 08:07:36', '2026-07-03 08:07:36'),
+(110, 45, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-07-03 08:07:36', '2026-07-03 08:07:36'),
+(111, 45, 10, 'Fruit Cleanup', 599, '2026-07-03 08:07:36', '2026-07-03 08:07:36'),
+(112, 45, 18, 'Forehead Threading', 139, '2026-07-03 08:07:36', '2026-07-03 08:07:36'),
+(113, 45, 25, 'Gel Manicure', 799, '2026-07-03 08:07:36', '2026-07-03 08:07:36'),
+(114, 46, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-07-03 08:09:04', '2026-07-03 08:09:04'),
+(115, 46, 25, 'Gel Manicure', 799, '2026-07-03 08:09:04', '2026-07-03 08:09:04'),
+(116, 46, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-07-03 08:09:04', '2026-07-03 08:09:04'),
+(117, 47, 1, 'Full Arms Regular Wax', 299, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(118, 47, 2, 'Full Legs Regular Wax', 349, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(119, 47, 3, 'Underarms Regular Wax', 169, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(120, 47, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(121, 47, 9, 'Detan Cleanup', 499, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(122, 47, 16, 'Eyebrows Threading', 149, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(123, 47, 29, 'Haircut (Any Length)', 399, '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(124, 48, 4, 'Full Body (Arms + Legs + Underarms) Regular Wax', 549, '2026-07-14 05:34:02', '2026-07-14 05:34:02'),
+(125, 48, 25, 'Gel Manicure', 799, '2026-07-14 05:34:02', '2026-07-14 05:34:02'),
+(126, 48, 8, 'Full Body (Arms + Legs + Underarms) Rica Wax', 1099, '2026-07-14 05:34:02', '2026-07-14 05:34:02');
 
 -- --------------------------------------------------------
 
@@ -136,7 +323,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (5, '2026_01_01_154838_create_packages_table', 1),
 (6, '2026_01_01_154847_create_time_slots_table', 1),
 (8, '2026_01_01_154853_create_booking_services_table', 1),
-(10, '2026_01_01_154848_create_bookings_table', 2);
+(10, '2026_01_01_154848_create_bookings_table', 2),
+(13, '2026_04_03_071048_create_payments_table', 3);
 
 -- --------------------------------------------------------
 
@@ -231,6 +419,47 @@ INSERT INTO `package_service` (`id`, `package_id`, `service_id`, `created_at`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `id` bigint UNSIGNED NOT NULL,
+  `booking_id` bigint UNSIGNED NOT NULL,
+  `razorpay_order_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `razorpay_payment_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` int NOT NULL,
+  `error_json` text COLLATE utf8mb4_unicode_ci,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending, successful, cancelled, failed',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `booking_id`, `razorpay_order_id`, `razorpay_payment_id`, `amount`, `error_json`, `status`, `created_at`, `updated_at`) VALUES
+(1, 32, 'order_SwmxwWToX0zEm7', NULL, 2348, NULL, 'pending', '2026-06-02 08:33:13', '2026-06-02 08:33:13'),
+(2, 33, 'order_SxUfzB0CBNVCWG', NULL, 2053, NULL, 'pending', '2026-06-04 03:18:42', '2026-06-04 03:18:42'),
+(3, 34, 'order_SxUsA70m1HfYY0', NULL, 2398, NULL, 'pending', '2026-06-04 03:30:14', '2026-06-04 03:30:14'),
+(4, 35, 'order_SxV40tz2ECEiSG', NULL, 3047, NULL, 'pending', '2026-06-04 03:41:27', '2026-06-04 03:41:27'),
+(5, 36, 'order_SxVAFwwft4j6VU', 'pay_SxVAnBsfHwbzOq', 2697, NULL, 'successful', '2026-06-04 03:47:22', '2026-06-04 03:48:10'),
+(6, 37, 'order_SxVDDgYp8ImFRA', NULL, 2596, NULL, 'pending', '2026-06-04 03:50:10', '2026-06-04 03:50:10'),
+(7, 38, 'order_SxVDvecj5i2haY', 'pay_SxVECy0fcFZ6Nt', 2497, NULL, 'successful', '2026-06-04 03:50:50', '2026-06-04 03:51:24'),
+(8, 39, 'order_SxVOhOHgWv1IUj', NULL, 2447, NULL, 'pending', '2026-06-04 04:01:02', '2026-06-04 04:01:02'),
+(9, 40, 'order_SxVwojlGHadPkJ', NULL, 2416, '{\"code\":\"BAD_REQUEST_ERROR\",\"description\":\"Invalid Token\",\"source\":\"internal\",\"step\":\"payment_creation\",\"reason\":\"invalid_token\",\"metadata\":[]}', 'failed', '2026-06-04 04:33:20', '2026-06-04 04:33:40'),
+(10, 41, 'order_SxXqhRBFDZXQ7o', NULL, 2001, '\"User Cancelled\"', 'cancelled', '2026-06-04 06:24:56', '2026-06-04 06:25:06'),
+(11, 42, 'order_SxXrKhGeuzDH29', NULL, 3848, '{\"code\":\"BAD_REQUEST_ERROR\",\"description\":\"Invalid Token\",\"source\":\"internal\",\"step\":\"payment_creation\",\"reason\":\"invalid_token\",\"metadata\":[]}', 'failed', '2026-06-04 06:25:32', '2026-06-04 06:25:50'),
+(12, 43, 'order_SxXulGHxkIGdV5', 'pay_SxXv1miSS6clne', 3501, NULL, 'successful', '2026-06-04 06:28:47', '2026-06-04 06:29:20'),
+(13, 44, 'order_SxXwJuBDMojHp4', NULL, 3501, '{\"code\":\"BAD_REQUEST_ERROR\",\"description\":\"Payment failed\",\"source\":\"gateway\",\"step\":\"payment_authorization\",\"reason\":\"payment_failed\",\"metadata\":{\"payment_id\":\"pay_SxXwZiYsC1WRH8\",\"order_id\":\"order_SxXwJuBDMojHp4\"}}', 'failed', '2026-06-04 06:30:15', '2026-06-04 06:30:39'),
+(14, 45, 'order_T935dw1sgosdZA', NULL, 358, '\"User Cancelled\"', 'cancelled', '2026-07-03 08:07:36', '2026-07-03 08:07:47'),
+(15, 46, 'order_T937CRWCKSOUKD', 'pay_T938CppcI2BeTl', 367, NULL, 'successful', '2026-07-03 08:09:05', '2026-07-03 08:10:21'),
+(16, 47, 'order_TDMFzIhs1a0oov', 'pay_TDMH946dD9ekJO', 362, NULL, 'successful', '2026-07-14 05:29:59', '2026-07-14 05:29:59'),
+(17, 48, 'order_TDMKxEbEP8QDKB', 'pay_TDMLN9SuHGsN8a', 2447, NULL, 'successful', '2026-07-14 05:34:02', '2026-07-14 05:34:02');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `services`
 --
 
@@ -284,7 +513,9 @@ INSERT INTO `services` (`id`, `sub_category_id`, `title`, `slug`, `price`, `sort
 (32, 10, 'Hair Spa (Any Length)', 'hair-spa-any-length', 699, 1, '2026-01-09 03:31:16', '2026-01-09 03:31:16'),
 (33, 10, 'Root Touch-Up', 'root-touch-up', 499, 2, '2026-01-09 03:31:30', '2026-01-09 03:31:30'),
 (34, 10, 'Global Hair Colour – Short Hair', 'global-hair-colour-short-hair', 799, 3, '2026-01-09 03:31:49', '2026-01-09 03:31:49'),
-(35, 10, 'Global Hair Colour – Long Hair', 'global-hair-colour-long-hair', 1099, 4, '2026-01-09 03:32:07', '2026-01-09 03:32:07');
+(35, 10, 'Global Hair Colour – Long Hair', 'global-hair-colour-long-hair', 1099, 4, '2026-01-09 03:32:07', '2026-01-09 03:32:07'),
+(36, 1, 'test 1', 'test-1', 2, 1, '2026-04-07 05:23:33', '2026-04-07 05:23:33'),
+(37, 3, 'test 2', 'test-2', 2, 1, '2026-04-07 05:23:48', '2026-04-07 05:23:48');
 
 -- --------------------------------------------------------
 
@@ -402,6 +633,13 @@ ALTER TABLE `package_service`
   ADD KEY `package_service_service_id_foreign` (`service_id`);
 
 --
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `payments_booking_id_foreign` (`booking_id`);
+
+--
 -- Indexes for table `services`
 --
 ALTER TABLE `services`
@@ -435,13 +673,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `booking_services`
 --
 ALTER TABLE `booking_services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -453,7 +691,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `packages`
@@ -468,10 +706,16 @@ ALTER TABLE `package_service`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `sub_categories`
@@ -509,6 +753,12 @@ ALTER TABLE `booking_services`
 ALTER TABLE `package_service`
   ADD CONSTRAINT `package_service_package_id_foreign` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `package_service_service_id_foreign` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `payments`
+--
+ALTER TABLE `payments`
+  ADD CONSTRAINT `payments_booking_id_foreign` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `services`
