@@ -37,7 +37,7 @@ booking_items
 	package_id(nullable)
 	price
 
-
+.
 php artisan migrate:refresh --path=/database/migrations/2026_04_03_071048_create_payments_table.php
 
 MAIL_MAILER=smtp
