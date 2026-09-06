@@ -180,9 +180,10 @@ header .logo {
 }
 header .inner_container .left_side{
 	display: flex;
-	position: absolute;
+	/* position: absolute; */
 	right: 50px;
 	top: 18px;
+	order: 2;
 }
 header .inner_container .left_side .call_icon,
 header .inner_container .left_side .get_appointment {
@@ -197,7 +198,7 @@ header nav {
     padding: 0;
      width: unset; 
     margin-top: 0%;
-    order: 2;
+    order: 3;
 }
 header.smaller .logo {
 	width:60%;
